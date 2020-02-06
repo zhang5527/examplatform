@@ -1,0 +1,126 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.layui-nav * {
+    font-size: 23px;
+}
+.header {
+    height: 75px;
+    background-color: #393D49;
+    color: #FFFFFF;
+    border-bottom: #00C1DE 3px solid;
+    clear: both;
+    overflow: hidden;
+}
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    list-style: none;
+}
+.logo {
+    line-height: 60px;
+    margin-top: 8px;
+    margin-bottom: 8px; 
+    font-size: 23px;
+}
+.logo span{
+    font-size: 23px;
+}
+.navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top:0;
+    z-index: 1030;
+}
+.up2{
+    margin-top: -2px;
+}
+.down{
+    margin-top: 100px;
+    margin-bottom: 30px;
+}
+.list-inline > li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+   
+}
+.pull-right {
+    font-size: 23px;  
+}
+.pull-right a{
+    color: #fff;
+    font-size: 23px;
+}
+ .menu {
+    height: 100%;
+    width: auto;
+    padding: 28px 35px 22px 35px;
+    display: block;
+    color: #FFFFFF;
+    position: relative;
+}
+.menu:hover {
+    background-color: #2A2A2A;
+    text-decoration: none;
+}
+.choice-btn{
+    display: inline-block;
+    font-weight: bold;
+    font-size:14px;
+    height: 20px;
+    line-height: 20px;
+    background-color: #777;
+    padding: 4px 8px;
+    color: white;
+    margin-top: 5px;
+    margin-right: 5px;
+    cursor: pointer;    
+}
+body{
+    color: #484848;
+    background-color: #e9eaed;
+}
+a{
+   text-decoration: none;
+ 
+}
+.left{
+    float: left !important; 
+}
+.right{
+    float: right !important;
+}
+.title{
+    line-height: 30px;
+    height: 30px;
+    font-size: 16px;
+    border-bottom: 1px solid #EEEEEE;
+    padding: 20px;
+}
+.desc{
+    padding: 20px;
+    font-size: 16px;
+    border-bottom: 1px solid #EEEEEE;
+}
+.content{
+    padding: 20px;
+  
+    border-bottom: 1px solid #EEEEEE;
+}
+.desc{
+    padding: 20px;
+    font-size: 16px;
+    border-bottom: 1px solid #EEEEEE;
+}
+.desc p:nth-child(1){
+    margin-top: 10px;
+}
+.desc p{
+    padding-bottom: 10px;
+}
+.hide{
+    display: none !important;
+}

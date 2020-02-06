@@ -1,0 +1,9 @@
+.text-center{
+    text-align: center
+}
+.table tbody tr td{
+    vertical-align: middle;
+}
+.padding{
+    padding: 20px;
+}

@@ -1,0 +1,107 @@
+a {
+    cursor: pointer;
+    text-decoration: none;
+}
+.excerpt {
+    clear: both;
+    border: 1px solid #EAEAEA;
+    padding: 20px 20px 20px 255px;
+    overflow: hidden;
+    background-color: #fff;
+    margin-bottom: -1px;
+}
+.excerpt .focus {
+    float: left;
+    margin-left: -235px;
+    width: 220px;
+}
+.excerpt .thumb {
+    border-radius: 5px;
+    width: 220px;
+    height: 150px;
+    overflow: hidden;
+}
+.excerpt header {
+    margin-bottom: 10px;
+}
+.excerpt .cat {
+    color: #FFF;
+    background-color: #3399CC;
+    padding: 3px 6px;
+    font-size: 12px;
+    display: inline-block;
+    position: relative;
+    top: -2px;
+    margin-right: 6px;
+}
+.excerpt .cat i {
+    position: absolute;
+    top: 50%;
+    margin-top: -4px;
+    right: -4px;
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: middle;
+    border-left: 4px solid #3399CC;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+}
+.excerpt h2 {
+    display: inline;
+    font-size: 18px;
+    line-height: 24px;
+    
+    font-weight: bold;
+}
+.excerpt h2 a {
+    color: #555;
+}
+.excerpt .meta {
+    color: #999;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+.excerpt .time, .excerpt .comment, .excerpt .views {
+    cursor: pointer;
+    margin-right: 20px;
+}
+.excerpt .note {
+    font-size: 12px;
+    color: #999;
+    word-wrap: break-word;
+    line-height: 20px;
+    cursor: default;
+}
+.excerpt:hover {
+    background-color: #FBFDFF;
+    border-color: #42B5EF;
+    position: relative;
+    z-index: 20;
+}
+@media (max-width: 640px){
+.excerpt .thumb {
+    width: 160px;
+    height: 109px;
+}
+.excerpt {
+    padding: 10px 10px 10px 180px;
+}
+.excerpt .focus {
+    width: 160px;
+    margin-left: -170px;
+}
+}
+@media (max-width: 480px){
+.excerpt {
+    padding: 10px 10px 10px 120px;
+}
+.excerpt .focus {
+    width: 100px;
+    margin-left: -110px;
+}
+.excerpt .thumb {
+    width: 100px;
+    height: 68px;
+}
+}

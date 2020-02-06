@@ -1,0 +1,19 @@
+.shorttitle {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 32px;
+}
+.text-center{
+    text-align: center
+}
+
+.text-danger{
+    color: #a94442;
+}
+.text-warning{
+    color: #8a6d3b
+}
+.text-info {
+    color: #31708f;
+}
