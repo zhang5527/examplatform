@@ -1,5 +1,6 @@
 ﻿using examinationPlatform.Interface;
 using examinationPlatform.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,6 +73,11 @@ namespace examinationPlatform.Service
                a.College,
                a.UserAccount
            });
+        }
+
+        public Users GetByAccount(string account)
+        {
+            return CreateService<Users>().FirstOrDefault(a => a.UserAccount == account);
         }
     }
 }

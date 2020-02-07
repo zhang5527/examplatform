@@ -45,6 +45,19 @@ namespace examinationPlatform.Service
             return CreateService<TestStorage>().Where(a => a.Type == sort.ToString() && (a.Title.Contains(search)||a.Content.Contains(search)||a.Subject.Contains(search)));
         }
 
+        public List<TestStorage> FindAllTest(string search)
+        {
+            switch (search)
+            {
+                case "填空":
+                    search = "choice";
+                    break;
+                default:
+                    break;
+            }
+            return CreateService<TestStorage>().Where(a => (a.Type.Contains(search)||a.Title.Contains(search) || a.Content.Contains(search) || a.Subject.Contains(search))).ToList();
+        }
+
         public bool JudgeIsExist(string title)
         {
             return CreateService<TestStorage>().Count(a => a.Title == title) > 0;      

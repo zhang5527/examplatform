@@ -1,5 +1,4 @@
 ﻿
-
 @{
     Layout = null;
 }
@@ -29,34 +28,34 @@
             <form class="layui-form">
                 <div class="layui-form-item">
                     <label for="Title" class="layui-form-label">
-                        <span class="x-red">*</span>题目
+                        <span class="x-red">*</span>名称
                     </label>
                     <div class="layui-input-inline">
-                        <textarea name="Title" placeholder="请输入内容" class="layui-textarea">@ViewBag.item.Title</textarea>
+                        <textarea name="Name" placeholder="请输入内容" class="layui-textarea">@ViewBag.exam.Name</textarea>
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>填空题题目
+                        <span class="x-red">*</span>试卷名称
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label for="Subject" class="layui-form-label">
-                        <span class="x-red">*</span>科目
+                        <span class="x-red">*</span>类型
                     </label>
                     <div class="layui-input-inline">
-                        <input name="Subject" value="@ViewBag.item.Subject" class="layui-input" required="" lay-verify="text">
+                        <input name="Subject" placeholder="请输入内容" class="layui-input" required="" lay-verify="text" value="@ViewBag.exam.Subject">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>填空题科目
+                        <span class="x-red">*</span>试卷类型
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="difficulty" class="layui-form-label">
+                    <label for="grade" class="layui-form-label">
                         <span class="x-red">*</span>难度
                     </label>
                     <div class="layui-input-inline">
-                        <select name="difficulty" lay-verify="required">
+                        <select name="Grade" lay-verify="required">
                             @{
-                                if (ViewBag.item.difficulty == "简单")
+                                if (ViewBag.exam.Grade == "简单")
                                 {
                                     <option value="简单" selected>简单</option>
                                 }
@@ -64,7 +63,7 @@
                                 {
                                     <option value="简单">简单</option>
                                 }
-                                if (ViewBag.item.difficulty == "中等")
+                                if (ViewBag.exam.Grade == "中等")
                                 {
                                     <option value="中等" selected>中等</option>
                                 }
@@ -72,7 +71,7 @@
                                 {
                                     <option value="中等">中等</option>
                                 }
-                                if (ViewBag.item.difficulty == "较难")
+                                if (ViewBag.exam.Grade == "较难")
                                 {
                                     <option value="较难" selected>较难</option>
                                 }
@@ -80,7 +79,7 @@
                                 {
                                     <option value="较难">较难</option>
                                 }
-                                if (ViewBag.item.difficulty == "难题")
+                                if (ViewBag.exam.Grade == "难题")
                                 {
                                     <option value="难题" selected>难题</option>
                                 }
@@ -94,40 +93,46 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="Subject" class="layui-form-label">
-                        <span class="x-red">*</span>答案
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>限制时间
                     </label>
-                    <div class="layui-input-inline">
-                        <select name="difficulty" lay-verify="required">
-                            @{
-                                if (ViewBag.item.Answer == "true")
-                                {
-                                    <option value="true" selected>正确</option>
-                                }
-                                else
-                                {
-                                    <option value="false">错误</option>
-                                }
-                            }
-                        </select>
+                    <div class="layui-input-inline layui-col-space4">
+                        <input name="hour" placeholder="设置小时" class="layui-input" required="" lay-verify="number" value="@ViewBag.exam.Time.Split('`')[0]">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>判断题答案
+                        小时
+                    </div>
+                    <div class="layui-input-inline layui-col-space4">
+                        <input name="minute" placeholder="设置分钟" class="layui-input" required="" lay-verify="number" value="@ViewBag.exam.Time.Split('`')[1]">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        分钟
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="explain" class="layui-form-label">
-                        <span class="x-red">*</span>解析
+                    <label for="remark" class="layui-form-label">
+                        <span class="x-red">*</span>考试码
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="Explain" name="Explain" required="" lay-verify="text"
-                               autocomplete="off" class="layui-input" value="@ViewBag.item.Explain.">
+                        <input type="text" id="code" placeholder="无" name="code" required="" lay-verify="text"
+                               autocomplete="off" class="layui-input" value="@ViewBag.exam.Code">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span> 输入对这题的解析
+                        <span class="x-red">*</span> 非公开考试，默认为无
                     </div>
                 </div>
-
+                <div class="layui-form-item">
+                    <label for="remark" class="layui-form-label">
+                        <span class="x-red">*</span>备注
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="remark" placeholder="无" name="remark" required="" lay-verify="text"
+                               autocomplete="off" class="layui-input" value="@ViewBag.exam.Remark">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">
+                        <span class="x-red">*</span> 输入备注，默认为无
+                    </div>
+                </div>
                 <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
@@ -139,21 +144,21 @@
         </div>
     </div>
     <script>
-layui.use(['form', 'layer'],
-            function() {
+        layui.use(['form', 'layer'],
+            function () {
                 $ = layui.jquery;
                 var form = layui.form,
-                layer = layui.layer;
-                choice = {};
+                    layer = layui.layer;
+                exam = {};
                 //自定义验证规则
                 form.verify({
-                    nikename: function(value) {
+                    nikename: function (value) {
                         if (value.length < 5) {
                             return '昵称至少得5个字符啊';
                         }
                     },
                     pass: [/(.+){6,12}$/, '密码必须6到12位'],
-                    repass: function(value) {
+                    repass: function (value) {
                         if ($('#L_pass').val() != $('#L_repass').val()) {
                             return '两次密码不一致';
                         }
@@ -164,20 +169,22 @@ layui.use(['form', 'layer'],
                 form.on('submit(add)',
                     function (data) {
                         //发异步，把数据提交给后台
-                        console.log(data.field.Id);
-                        choice.Title = data.field.Title;
-                        choice.Id=@ViewBag.item.Id;
-                        choice.Answer = data.field.Answer;
-                        choice.Explain = data.field.Explain;
-                        choice.difficulty = data.field.difficulty;
-                        choice.Subject = data.field.Subject;
-                        console.log(choice);
+                        console.log(data.field);
+                        exam.Name = data.field.Name;
+                        data.field.hour == "" ? data.field.hour = 0 : data.field.hour = data.field.hour;
+                        data.field.minute == "" ? data.field.minute = 0 :data.field.minute = data.field.minute;
+                        exam.Time = data.field.hour + '`' + data.field.minute;
+                        exam.Remark = data.field.remark;
+                        exam.Grade = data.field.grade;
+                        exam.Subject = data.field.Subject;
+                        exam.Code = data.field.code;
+                        console.log(exam);
                         $.ajax({
                             type: "POST",
                             dataType: "json",
-                            url: "/Test/ModifyTest?type=blank",
+                            url: "/exam/EditExam?id=@ViewBag.exam.Id",
                             contentType: "application/json",
-                            data: JSON.stringify(choice),
+                            data: JSON.stringify(exam),
                             success: function (data) {
                                 layer.alert("增加成功", {
                                     icon: 6
@@ -190,19 +197,28 @@ layui.use(['form', 'layer'],
                                     });
                             }
                         });
+                        //发异步，把数据提交给php
+                        layer.alert("增加成功", {
+                            icon: 6
+                        },
+                            function () {
+                                //关闭当前frame
+                                xadmin.close();
 
-
-                    return false;
-                });
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        return false;
+                    });
 
             });</script>
     <script>
-var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
+        var _hmt = _hmt || []; (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script>
 </body>
 
 </html>

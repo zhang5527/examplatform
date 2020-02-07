@@ -38,9 +38,16 @@ namespace examinationPlatform.Controllers
             }
             else
             {
-                string a = user.UserAccount;
-                if(Admin.login(user)) return Content("123");
-                else return Content("321");
+                if (Admin.login(user)) {
+                    HttpContext.Session.SetString("admin", user.UserAccount);
+                    return Redirect("/admin/index");
+                }
+                else  
+                return new ContentResult()
+                {
+                    Content = "<script>alert('账户信息有误');history.go(-1);</script>",
+                    ContentType = "text/html;charset=utf-8"
+                };
 
             }
 

@@ -131,9 +131,28 @@ namespace examinationPlatform.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                   .HasMaxLength(30)
+                   .IsUnicode(false);
+                  
+                entity.Property(e => e.Remark)
+                    .HasColumnName("remark")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+                entity.Property(e => e.Code)
+                    .HasColumnName("code")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PublishTime)
                     .HasColumnName("publish_time")
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Time)
+                    .HasColumnName("time")
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Publisher).HasColumnName("publisher");

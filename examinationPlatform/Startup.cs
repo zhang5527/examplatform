@@ -56,14 +56,14 @@ namespace examinationPlatform
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=admin}/{action=Index}/{id?}");
+                    pattern: "{controller=admin}/{action=login}/{id?}");
             });
         }
     }

@@ -18,6 +18,14 @@ namespace examinationPlatform.Models
         public string Grade { get; set; }
         public string Group { get; set; }
 
+        public string Name { get; set; }
+
+        public string Remark { get; set; }
+
+        public string Code { get; set; }
+
+        public string Time { get; set; }
+
         public virtual Users PublisherNavigation { get; set; }
         public virtual ICollection<ExamContent> ExamContent { get; set; }
         public virtual ICollection<ExamRecord> ExamRecord { get; set; }

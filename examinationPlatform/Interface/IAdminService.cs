@@ -11,6 +11,8 @@ namespace examinationPlatform.Interface
         bool login(Users user);
         IQueryable<object> GetAll();
 
+        public Users GetByAccount(string account);
+
         public IQueryable<object> FindUser(string name);
         public bool AddUser(Users user);
 

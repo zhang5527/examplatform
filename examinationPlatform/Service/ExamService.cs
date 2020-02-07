@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using examinationPlatform.Interface;
 using examinationPlatform.Models;
@@ -26,12 +27,15 @@ namespace examinationPlatform.Service
 
         public IQueryable<ExamStorage> FindAllExam(string search = "")
         {
-            return  CreateService<ExamStorage>().GetAll();
+            if(search==""||search==null)
+            return  CreateService<ExamStorage>().GetAll().Include(a=>a.PublisherNavigation);
+            else
+            return CreateService<ExamStorage>().Where(a=>a.Group.Contains(search)||a.Name.Contains(search));
         }
 
         public ExamStorage FindExamById(int id)
         {
-            return CreateService<ExamStorage>().GetById(id);
+            return CreateService<ExamStorage>().Entities.Include(a=>a.PublisherNavigation).Where(a=>a.Id==id).FirstOrDefault();
         }
 
         public void ModifyExam(ExamStorage Exam)
