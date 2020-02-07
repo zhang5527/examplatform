@@ -25,9 +25,9 @@
 
   <ItemGroup>
     <Folder Include="file\excel\" />
-    <Folder Include="wwwroot\html\" />
     <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\upload\" />
+    <Folder Include="wwwroot\upload\imgs\" />
+    <Folder Include="wwwroot\fonts\" />
   </ItemGroup>
 
 

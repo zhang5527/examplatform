@@ -35,6 +35,7 @@ namespace examinationPlatform
             services.AddScoped<IRepositoryFactory, RepositoryFactory>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ITestStorage, TestService>();
+            services.AddScoped<IExamService, ExamService>();
             services.AddDbContext<exam_platformContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
         }
 
@@ -62,7 +63,7 @@ namespace examinationPlatform
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=admin}/{action=Index}/{id?}");
             });
         }
     }

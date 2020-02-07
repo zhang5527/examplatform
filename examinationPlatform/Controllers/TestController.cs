@@ -7,15 +7,21 @@ using examinationPlatform.Models;
 using examinationPlatform.Interface;
 using Newtonsoft.Json.Linq;
 using examinationPlatform.Common;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Data;
 
 namespace examinationPlatform.Controllers
 {
     public class TestController : Controller
     {
         private ITestStorage Test;
-        public TestController(ITestStorage test)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public TestController(ITestStorage test, IWebHostEnvironment hostingEnvironment)
         {
             Test = test;
+            _hostingEnvironment = hostingEnvironment;
         }
         public IActionResult TestIndex()
         {       
@@ -51,6 +57,35 @@ namespace examinationPlatform.Controllers
             ViewBag.count = blanks.Count();
             return View();
         }
+
+        public IActionResult JudgeList()
+        {
+            var command = HttpContext.Request.Query["search"].ToString();
+            IQueryable<TestStorage> judges;
+            if (command == "")
+                judges = Test.FindTestBySort(Common.TestSort.judege);
+            else
+            {
+                judges = Test.FindTestBySort(Common.TestSort.judege, command);
+            }
+            ViewBag.items = judges;
+            ViewBag.count = judges.Count();
+            return View();
+        }
+        public IActionResult AnswerList()
+        {
+            var command = HttpContext.Request.Query["search"].ToString();
+            IQueryable<TestStorage> answers;
+            if (command == "")
+                answers = Test.FindTestBySort(Common.TestSort.answer);
+            else
+            {
+                answers = Test.FindTestBySort(Common.TestSort.answer, command);
+            }
+            ViewBag.items = answers;
+            ViewBag.count = answers.Count();
+            return View();
+        }
         [HttpGet]
         public IActionResult EditChoice()
         {
@@ -60,6 +95,20 @@ namespace examinationPlatform.Controllers
         }
         [HttpGet]
         public IActionResult EditBlank()
+        {
+            String id = HttpContext.Request.Query["id"];
+            ViewBag.item = Test.FindTestById(Convert.ToInt32(id));
+            return View();
+        }
+        [HttpGet]
+        public IActionResult EditJudge()
+        {
+            String id = HttpContext.Request.Query["id"];
+            ViewBag.item = Test.FindTestById(Convert.ToInt32(id));
+            return View();
+        }
+        [HttpGet]
+        public IActionResult EditAnswer()
         {
             String id = HttpContext.Request.Query["id"];
             ViewBag.item = Test.FindTestById(Convert.ToInt32(id));
@@ -136,6 +185,119 @@ namespace examinationPlatform.Controllers
             Test.DeleteTest(Convert.ToInt32(id));          
             return Content("1");
         }
-
+        [HttpPost]
+        public IActionResult AddImg(IFormFile file)
+        {
+            string newFileName = System.Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //随机生成新的文件名
+            string path = "/upload/imgs/" + newFileName;
+            string filepath = _hostingEnvironment.WebRootPath + @$"\{path}";
+            string type = HttpContext.Request.Query["type"];
+            using (FileStream fs = System.IO.File.Create(filepath))//创建文件流
+            {
+                file.CopyTo(fs);//将上载文件的内容复制到目标流
+                fs.Flush();//清除此流的缓冲区并导致将任何缓冲数据写入
+            }
+            return Json(new
+            {
+                code=0,
+                msg="",
+                data = new
+                {
+                    src= path
+                }
+            });
+        }
+        public IActionResult AddTestsFromExcel(IFormFile file)
+        {
+            //string rootdir = AppContext.BaseDirectory;
+            //DirectoryInfo Dir = Directory.GetParent(rootdir);
+            //string root = Dir.Parent.Parent.FullName;
+            string newFileName = System.Guid.NewGuid().ToString() + Path.GetExtension(file.FileName); //随机生成新的文件名
+            string path = "/upload/" + newFileName;
+            string filepath = _hostingEnvironment.WebRootPath + @$"\{path}";
+            string type = HttpContext.Request.Query["type"];
+            int FalseFlag = 0;
+            using (FileStream fs = System.IO.File.Create(filepath))//创建文件流
+            {
+                file.CopyTo(fs);//将上载文件的内容复制到目标流
+                fs.Flush();//清除此流的缓冲区并导致将任何缓冲数据写入
+            }
+            DataTable a = ExcelHelper.ExcelToTable(filepath);
+            TestStorage test=new TestStorage();
+            foreach (DataRow item in a.Rows)
+            {
+                try
+                {
+                    switch (type)
+                    {
+                        case "choice":
+                            if (a.Columns.Count != 9) FalseFlag=1;
+                            test = new TestStorage()
+                            {
+                                Title = item[0].ToString(),
+                                Subject = item[1].ToString(),
+                                Content = $"{item[2].ToString()}`{item[3].ToString()}`{item[4].ToString()}`{item[5].ToString()}",
+                                Type = Common.TestSort.choice.ToString(),
+                                Answer = item[6].ToString(),
+                                Explain = item[7].ToString(),
+                                difficulty=item[8].ToString()
+                            };
+                            break;
+                        case "blank":
+                            if (a.Columns.Count != 5) FalseFlag = 1;
+                            test = new TestStorage()
+                            {
+                                Title = item[0].ToString(),                              
+                                Type = Common.TestSort.blank.ToString(),
+                                Subject=item[1].ToString(),
+                                Answer = item[2].ToString(),
+                                Explain = item[3].ToString(),
+                                difficulty=item[4].ToString(),
+                            };
+                            break;
+                        case "judege":
+                            if (a.Columns.Count != 5) FalseFlag = 1;
+                            test = new TestStorage()
+                            {
+                                Title = item[0].ToString(),
+                                Type = Common.TestSort.judege.ToString(),
+                                Subject = item[1].ToString(),
+                                Answer = item[2].ToString(),
+                                Explain = item[3].ToString(),
+                                difficulty = item[4].ToString(),
+                            };
+                            break;
+                        case "answer":
+                            if (a.Columns.Count != 4) FalseFlag = 1;
+                            test = new TestStorage()
+                            {
+                                Title = item[0].ToString(),
+                                Type = Common.TestSort.answer.ToString(),
+                                Subject = item[1].ToString(),
+                                Answer = item[2].ToString(),
+                                Explain = item[3].ToString(),
+                                difficulty = item[4].ToString(),
+                            };
+                            break;
+                        default:
+                            break;
+                    }
+                    if (FalseFlag == 1) break;
+                    if (Test.JudgeIsExist(item[0].ToString())) continue;
+                    Test.AddTest(test);
+                }
+                catch (Exception e)
+                {
+                    return new ContentResult()
+                    {
+                        Content = "0",
+                        ContentType = "text/html;charset=utf-8"
+                    };
+                }
+            }
+            System.IO.File.Delete(filepath);
+            if(FalseFlag==1) return Content("0");
+            return Content("1");
+        }
     }
 }

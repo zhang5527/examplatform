@@ -1,7 +1,10 @@
 ﻿
+
 @{
     Layout = null;
 }
+
+
 
 <!DOCTYPE html>
 <html class="x-admin-sm">
@@ -48,9 +51,9 @@
                 </div>
                 <div class="layui-card">
                     <div class="layui-card-header">
-                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/choice_tip.html',600,400)"><i class="layui-icon"></i>批量导入</button>
+                        <button class="layui-btn layui-btn-danger" onclick="insertAll()"><i class="layui-icon"></i>批量导入</button>
                         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_choice.html',600,400)"><i class="layui-icon"></i>添加</button>
+                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_judge.html',600,400)"><i class="layui-icon"></i>添加</button>
                     </div>
                     <div class="layui-card-body layui-table-body layui-table-main">
                         <table class="layui-table layui-form">
@@ -61,17 +64,14 @@
                                     </th>
                                     <th>类型</th>
                                     <th>题目</th>
-                                    <th>选项A</th>
-                                    <th>选项B</th>
-                                    <th>选项C</th>
-                                    <th>选项D</th>
                                     <th>正确答案</th>
+                                    <th>难度</th>
                                     <th>发布日期</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in ViewBag.choices)
+                                @foreach (var item in ViewBag.items)
                                 {
                                 <tr>
                                     <td>
@@ -79,14 +79,11 @@
                                     </td>
                                     <td>@item.Subject</td>
                                     <td>@item.Title</td>
-                                    <td>@item.Content.Split('`')[0]</td>
-                                    <td>@item.Content.Split('`')[1]</td>
-                                    <td>@item.Content.Split('`')[2]</td>
-                                    <td>@item.Content.Split('`')[3]</td>
                                     <td>@item.Answer</td>
+                                    <td>@item.difficulty</td>
                                     <th>@item.PublishDate</th>
                                     <td class="td-manage">
-                                        <a title="编辑" onclick="xadmin.open('编辑','/test/editchoice?id=@item.Id',600,400)" href="javascript:;">
+                                        <a title="编辑" onclick="xadmin.open('编辑','/test/EditJudge?id=@item.Id',600,400)" href="javascript:;">
                                             <i class="layui-icon">&#xe642;</i>
                                         </a>
                                         <a title="删除" onclick="member_del(this,'@item.Id')" href="javascript:;">
@@ -101,15 +98,15 @@
                     <div class="layui-card-body ">
                         <div id="demo1"></div>
                         @*<div class="page">
-                            <div>
-                                <a class="prev" href="">&lt;&lt;</a>
-                                <a class="num" href="">1</a>
-                                <span class="current">2</span>
-                                <a class="num" href="">3</a>
-                                <a class="num" href="">489</a>
-                                <a class="next" href="">&gt;&gt;</a>
-                            </div>
-                        </div>*@
+                                <div>
+                                    <a class="prev" href="">&lt;&lt;</a>
+                                    <a class="num" href="">1</a>
+                                    <span class="current">2</span>
+                                    <a class="num" href="">3</a>
+                                    <a class="num" href="">489</a>
+                                    <a class="next" href="">&gt;&gt;</a>
+                                </div>
+                            </div>*@
                     </div>
                 </div>
             </div>
@@ -153,8 +150,7 @@
         });
           form.on('submit(sreach)', function (data) {
               console.log('111');
-             window.location.href = "/test/ChoiceList?search=" + data.field.search;
-
+             window.location.href = "/test/JudgeList?search=" + data.field.search;
          })
         //执行一个laydate实例
         laydate.render({
@@ -253,9 +249,11 @@
                      layer.msg('系统错误');
                  }
              })
-            layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });
-      }
+    }
+    function insertAll() {
+        xadmin.open('批量导入','/html/judge_tip.html',600,400)
+    }
 </script>
 </html>

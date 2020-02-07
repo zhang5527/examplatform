@@ -56,7 +56,6 @@
                     <div class="layui-input-inline">
                         <select name="difficulty" lay-verify="required">
                             @{
-
                                 if (ViewBag.item.difficulty == "简单")
                                 {
                                     <option value="简单" selected>简单</option>
@@ -65,7 +64,7 @@
                                 {
                                     <option value="简单">简单</option>
                                 }
-                                if (ViewBag.item.difficulty == "中等")
+                                if (ViewBag.item.difficulty == "B")
                                 {
                                     <option value="中等" selected>中等</option>
                                 }
@@ -73,7 +72,7 @@
                                 {
                                     <option value="中等">中等</option>
                                 }
-                                if (ViewBag.item.difficulty == "较难")
+                                if (ViewBag.item.difficulty == "C")
                                 {
                                     <option value="较难" selected>较难</option>
                                 }
@@ -81,7 +80,7 @@
                                 {
                                     <option value="较难">较难</option>
                                 }
-                                if (ViewBag.item.difficulty == "难题")
+                                if (ViewBag.item.difficulty == "D")
                                 {
                                     <option value="难题" selected>难题</option>
                                 }
@@ -95,15 +94,25 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="Answer" class="layui-form-label">
+                    <label for="Subject" class="layui-form-label">
                         <span class="x-red">*</span>答案
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" id="Explain" name="Answer" required="" lay-verify="text"
-                               autocomplete="off" class="layui-input" value="@ViewBag.item.Answer">
+                        <select name="difficulty" lay-verify="required">
+                            @{
+                                if (ViewBag.item.Answer == "true")
+                                {
+                                    <option value="true" selected>正确</option>
+                                }
+                                else
+                                {
+                                    <option value="false">错误</option>
+                                }
+                            }
+                        </select>
                     </div>
                     <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span> 输入对这题的答案
+                        <span class="x-red">*</span>判断题答案
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -170,7 +179,7 @@ layui.use(['form', 'layer'],
                             contentType: "application/json",
                             data: JSON.stringify(choice),
                             success: function (data) {
-                                layer.alert("修改成功", {
+                                layer.alert("增加成功", {
                                     icon: 6
                                 },
                                     function () {

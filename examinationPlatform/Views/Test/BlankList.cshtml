@@ -9,7 +9,7 @@
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>欢迎页面-X-admin2.2</title>
+    <title>填空列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -50,6 +50,7 @@
                 </div>
                 <div class="layui-card">
                     <div class="layui-card-header">
+                        <button class="layui-btn layui-btn-danger" onclick="insertAll()"><i class="layui-icon"></i>批量导入</button>
                         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
                         <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_blank.html',600,400)"><i class="layui-icon"></i>添加</button>
                     </div>
@@ -146,7 +147,7 @@
         });
           form.on('submit(sreach)', function (data) {
               console.log('111');
-             window.location.href = "/test/ChoiceList?search=" + data.field.search;
+             window.location.href = "/test/BlankList?search=" + data.field.search;
 
          })
         //执行一个laydate实例
@@ -246,9 +247,11 @@
                      layer.msg('系统错误');
                  }
              })
-            layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });
-      }
+    }
+        function insertAll() {
+        xadmin.open('批量导入','/html/blank_tip.html',600,400)
+    }
 </script>
 </html>

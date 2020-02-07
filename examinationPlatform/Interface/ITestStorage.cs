@@ -18,7 +18,8 @@ namespace examinationPlatform.Interface
         IQueryable<TestStorage> FindTestBySort(TestSort sort);
 
         IQueryable<TestStorage> FindTestBySort(TestSort sort,string search);
-        TestStorage FindTestById(int id);  
+        TestStorage FindTestById(int id);
 
+        bool JudgeIsExist(string title);
     }
 }

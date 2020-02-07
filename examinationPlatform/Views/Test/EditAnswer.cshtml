@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     Layout = null;
 }
 
@@ -28,27 +26,38 @@
         <div class="layui-row">
             <form class="layui-form">
                 <div class="layui-form-item">
-                    <label for="Title" class="layui-form-label">
-                        <span class="x-red">*</span>题目
-                    </label>
-                    <div class="layui-input-inline">
-                        <textarea name="Title" placeholder="请输入内容" class="layui-textarea">@ViewBag.item.Title</textarea>
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span>填空题题目
-                    </div>
-                </div>
-                <div class="layui-form-item">
                     <label for="Subject" class="layui-form-label">
                         <span class="x-red">*</span>科目
                     </label>
                     <div class="layui-input-inline">
-                        <input name="Subject" value="@ViewBag.item.Subject" class="layui-input" required="" lay-verify="text">
+                        <input name="Subject" placeholder="请输入内容" class="layui-input" required="" lay-verify="text">
                     </div>
                     <div class="layui-form-mid layui-word-aux">
                         <span class="x-red">*</span>填空题科目
                     </div>
                 </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">内容</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea id="demo" style="display: none;" name="title">@ViewBag.item.Title</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">答案</span>
+                    </label>
+                    <div class="layui-input-block">
+                        <textarea id="demo1" style="display: none;" name="Answer">@ViewBag.item.Answer</textarea>
+                    </div>
+                </div>
+                <script>
+                    layui.use('layedit', function () {
+
+                    });
+                </script>
                 <div class="layui-form-item">
                     <label for="difficulty" class="layui-form-label">
                         <span class="x-red">*</span>难度
@@ -56,7 +65,6 @@
                     <div class="layui-input-inline">
                         <select name="difficulty" lay-verify="required">
                             @{
-
                                 if (ViewBag.item.difficulty == "简单")
                                 {
                                     <option value="简单" selected>简单</option>
@@ -95,56 +103,40 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label for="Answer" class="layui-form-label">
-                        <span class="x-red">*</span>答案
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="Explain" name="Answer" required="" lay-verify="text"
-                               autocomplete="off" class="layui-input" value="@ViewBag.item.Answer">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span> 输入对这题的答案
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label for="explain" class="layui-form-label">
-                        <span class="x-red">*</span>解析
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="Explain" name="Explain" required="" lay-verify="text"
-                               autocomplete="off" class="layui-input" value="@ViewBag.item.Explain.">
-                    </div>
-                    <div class="layui-form-mid layui-word-aux">
-                        <span class="x-red">*</span> 输入对这题的解析
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
                     <label for="L_repass" class="layui-form-label">
                     </label>
                     <button class="layui-btn" lay-filter="add" lay-submit="">
-                        修改
+                        增加
                     </button>
                 </div>
             </form>
         </div>
     </div>
     <script>
-layui.use(['form', 'layer'],
-            function() {
+        layui.use(['form', 'layer', 'layedit'],
+            function () {
                 $ = layui.jquery;
                 var form = layui.form,
-                layer = layui.layer;
+                    layer = layui.layer;
                 choice = {};
+                var layedit = layui.layedit;
+                layedit.set({
+                    uploadImage: {
+                        url: '/test/AddImg' //接口url
+                        , type: '' //默认post
+                    }
+                });
+                var answer = layedit.build('demo1');
+                var title = layedit.build('demo'); //建立编辑器
                 //自定义验证规则
                 form.verify({
-                    nikename: function(value) {
+                    nikename: function (value) {
                         if (value.length < 5) {
                             return '昵称至少得5个字符啊';
                         }
                     },
                     pass: [/(.+){6,12}$/, '密码必须6到12位'],
-                    repass: function(value) {
+                    repass: function (value) {
                         if ($('#L_pass').val() != $('#L_repass').val()) {
                             return '两次密码不一致';
                         }
@@ -155,10 +147,9 @@ layui.use(['form', 'layer'],
                 form.on('submit(add)',
                     function (data) {
                         //发异步，把数据提交给后台
-                        console.log(data.field.Id);
-                        choice.Title = data.field.Title;
-                        choice.Id=@ViewBag.item.Id;
-                        choice.Answer = data.field.Answer;
+                        console.log(data.field);
+                        choice.Title = layedit.getContent(title);
+                        choice.Answer = layedit.getContent(answer);
                         choice.Explain = data.field.Explain;
                         choice.difficulty = data.field.difficulty;
                         choice.Subject = data.field.Subject;
@@ -166,11 +157,11 @@ layui.use(['form', 'layer'],
                         $.ajax({
                             type: "POST",
                             dataType: "json",
-                            url: "/Test/ModifyTest?type=blank",
+                            url: "/Test/AddTest?type=answer",
                             contentType: "application/json",
                             data: JSON.stringify(choice),
                             success: function (data) {
-                                layer.alert("修改成功", {
+                                layer.alert("增加成功", {
                                     icon: 6
                                 },
                                     function () {
@@ -181,19 +172,28 @@ layui.use(['form', 'layer'],
                                     });
                             }
                         });
+                        //发异步，把数据提交给php
+                        layer.alert("增加成功", {
+                            icon: 6
+                        },
+                            function () {
+                                //关闭当前frame
+                                xadmin.close();
 
-
-                    return false;
-                });
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            });
+                        return false;
+                    });
 
             });</script>
     <script>
-var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
+        var _hmt = _hmt || []; (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();</script>
 </body>
 
 </html>
