@@ -18,5 +18,7 @@ namespace examinationPlatform.Interface
 
         ExamStorage FindExamById(int id);
 
+        void AddTestToExam(List<ExamContent> contents);
+
     }
 }

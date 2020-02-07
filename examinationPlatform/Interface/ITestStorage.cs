@@ -21,5 +21,7 @@ namespace examinationPlatform.Interface
         TestStorage FindTestById(int id);
 
         bool JudgeIsExist(string title);
+
+        List<TestStorage> FindAllTest(string search);
     }
 }

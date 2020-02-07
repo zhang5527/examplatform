@@ -1,4 +1,9 @@
 ﻿
+@{
+    Layout = null;
+}
+
+
 
 <!DOCTYPE html>
 <html class="x-admin-sm">
@@ -37,7 +42,7 @@
             <div class="layui-col-md12">
                 <div class="layui-card">
                     <div class="layui-card-header">
-                        已有  题选择  题判断  题填空 
+                        已有   @ViewBag.Count1 题选择   @ViewBag.Count3 题判断    @ViewBag.Count2题填空
                     </div>
                     <div class="layui-card-body ">
                         <form class="layui-form layui-col-space5">
@@ -57,10 +62,11 @@
                                 <tr>
                                     <th lay-data="{type:'checkbox'}">ID</th>
                                     <th lay-data="{field:'id', sort: true,width:200}">ID</th>
-                                    <th lay-data="{field:'title', sort: true, edit: 'text',width:200}">题目</th>
-                                    <th lay-data="{field:'content', edit: 'text',width:200}">内容</th>
+                                    <th lay-data="{field:'type', sort: true,width:200}">类型</th>
+                                    <th lay-data="{field:'title', sort: true,width:200}">题目</th>
+                                    <th lay-data="{field:'content',width:200}">内容</th>
                                     <th lay-data="{field:'answer',width:200}">答案</th>
-                                    <th lay-data="{field:'difficulty', edit: 'text',width:180}">难度</th>
+                                    <th lay-data="{field:'difficulty',width:180}">难度</th>
                                 </tr>
                             </thead>
                         </table>
@@ -76,7 +82,7 @@
         <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加选择 </button>
         <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加填空 </button>
         <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加判断 </button>
-        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加问答 </button>     
+        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加问答 </button>
     </div>
 </script>
 <script type="text/html" id="switchTpl">
@@ -91,29 +97,6 @@
             var table = layui.table;
             var form = layui.form;
             //监听单元格编辑
-            table.on('edit(test)',
-                function (obj) {
-                    var value = obj.value //得到修改后的值
-                        ,
-                        data = obj.data, //得到所在行所有键值
-
-                        field = obj.field; //得到字段
-                    $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        url: "/admin/ModifyUser",
-                        contentType: "application/json",
-                        data: JSON.stringify(data),
-                        success: function (data) {
-                            layer.alert("修改成功", {
-                                icon: 6
-                            }
-                            );
-                        }
-                    });
-                    //layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
-                });
-
             //头工具栏事件
             table.on('toolbar(test)',
                 function (obj) {
@@ -130,19 +113,19 @@
                             });
                             console.log(delList);
                             if (delList != '') {
-                                layer.confirm('确定删除所选项吗？', function (index) {
+                                layer.confirm('确定增加所选项吗？', function (index) {
                                     $.ajax({
-                                        url: '/admin/RemoveUsers',
+                                        url: '/exam/AddTestsToExam?exam=@ViewBag.id ',
                                         type: 'post',
                                         dataType: 'text',
                                         data: "id=" + delList,
                                         success: function (data) {
                                             console.log(data);
                                             if (data == '1') {
-                                                layer.msg('删除成功');
+                                                layer.msg('增加成功');
                                                 table.reload(obj.config.id, {});
                                             } else {
-                                                layer.msg('删除失败');
+                                                layer.msg('增加失败');
                                             }
                                         },
                                         'error': function () {

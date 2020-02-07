@@ -35,12 +35,17 @@ namespace examinationPlatform.Service
 
         public ExamStorage FindExamById(int id)
         {
-            return CreateService<ExamStorage>().Entities.Include(a=>a.PublisherNavigation).Where(a=>a.Id==id).FirstOrDefault();
+            return CreateService<ExamStorage>().Entities.Include(a => a.PublisherNavigation).Include(a => a.ExamContent).ThenInclude(a=>a.Test).Where(a=>a.Id==id).FirstOrDefault();
         }
 
         public void ModifyExam(ExamStorage Exam)
         {
             CreateService<ExamStorage>().Update(Exam);
+        }
+
+        public void AddTestToExam(List<ExamContent> contents)
+        {
+             CreateService<ExamContent>().AddRange(contents);
         }
     }
 }

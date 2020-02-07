@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using examinationPlatform.Models;
 using examinationPlatform.Interface;
+using examinationPlatform.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -72,7 +73,65 @@ namespace examinationPlatform.Controllers
 
         public IActionResult GetTestsJson()
         {
-           Test.FindAllTest()
+           string search = HttpContext.Request.Query["search"];
+            var list =Test.FindAllTest(search);
+            foreach (var item in list)
+            {
+                if (item.Type == Common.TestSort.choice.ToString())
+                {
+                    item.Content = $"选项A： {item.Content.Split('`')[0]}；选项B： {item.Content.Split('`')[1]}；" +
+                        $"选项C： {item.Content.Split('`')[2]}；选项D： {item.Content.Split('`')[3]}；";
+                }
+                switch (item.Type)
+                {
+                    case "choice":
+                        item.Type = "选择题";
+                        break;
+                    case "answer":
+                        item.Type = "问答题";
+                        break;
+                    case "blank":
+                        item.Type = "填空题";
+                        break;
+                    case "judege":
+                        item.Type = "判断题";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            var data = list.Select(a => new { a.Type, a.Content, a.Title, a.Id, a.difficulty, a.Answer });
+            return Json( new {
+                 data,
+                code = 0,
+                msg = 123,
+                count =data.Count() ,
+            });
+        }
+
+        public IActionResult ChooseTest()
+        {
+            int ExamId = Convert.ToInt32(HttpContext.Request.Query["exam"]);
+            var exam= Exam.FindExamById(ExamId);
+            ViewBag.Count1 = exam.ExamContent.Where(a => a.Test.Type == Common.TestSort.choice.ToString()).Count();
+            ViewBag.Count2 = exam.ExamContent.Where(a => a.Test.Type == Common.TestSort.blank.ToString()).Count();
+            ViewBag.Count3 = exam.ExamContent.Where(a => a.Test.Type == Common.TestSort.judege.ToString()).Count();
+            ViewBag.Count4 = exam.ExamContent.Where(a => a.Test.Type == Common.TestSort.answer.ToString()).Count();
+            ViewBag.id = exam.Id;
+            return View();
+        }
+        [HttpPost]
+        public IActionResult AddTestsToExam()
+        {
+            var exam = Exam.FindExamById(Convert.ToInt32(HttpContext.Request.Query["exam"]));
+            var TestIds = HttpContext.Request.Form["id"].ToString().Split(',');
+            List<ExamContent> contents = new List<ExamContent>();
+            for (int i = 0; i < TestIds.Length; i++)
+            {
+                contents.Add(new ExamContent { ExamId = exam.Id, TestId = Convert.ToInt32(TestIds[i]) });
+            }
+            Exam.AddTestToExam(contents);
+            return Content("1");
         }
     }
 }

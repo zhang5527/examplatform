@@ -47,10 +47,20 @@ namespace examinationPlatform.Service
 
         public List<TestStorage> FindAllTest(string search)
         {
-            switch (search)
+            if (search == null) return CreateService<TestStorage>().GetAll().ToList();
+            switch (search.Trim(' '))
             {
                 case "填空":
+                    search = "blank";
+                    break;
+                case "选择":
                     search = "choice";
+                    break;
+                case "判断":
+                    search = "judege";
+                    break;
+                case "问答":
+                    search = "answer";
                     break;
                 default:
                     break;
