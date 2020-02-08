@@ -52,6 +52,24 @@ namespace examinationPlatform.Controllers
             ViewBag.exam = Exam.FindExamById(id);
             return View();
         }
+
+        public IActionResult SearchTest()
+        {
+            int id = Convert.ToInt32(HttpContext.Request.Query["id"]);
+            ViewBag.Exam = id;
+            var tests = Exam.FindAllTest(id);
+            ViewBag.tests= tests;
+            ViewBag.count = tests.Count();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult deletetest()
+        {
+            int id = Convert.ToInt32(HttpContext.Request.Form["id"]);
+            int exam = Convert.ToInt32(HttpContext.Request.Query["exam"]);
+            Exam.DeleteTest(exam, id);
+            return Content("1");
+        }
         [HttpPost]
         public IActionResult ModifyExam([FromBody] ExamStorage exam)
         {

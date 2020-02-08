@@ -14,9 +14,9 @@ namespace examinationPlatform.Service
         {
 
         }
-        public bool AddTest(TestStorage test)
+        public TestStorage AddTest(TestStorage test)
         {
-            return CreateService<TestStorage>().Add(test) != null;
+            return CreateService<TestStorage>().Add(test) ;
         }
 
 

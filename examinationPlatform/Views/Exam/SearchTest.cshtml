@@ -1,9 +1,7 @@
 ﻿
-
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html class="x-admin-sm">
 <head>
@@ -48,49 +46,43 @@
                     </form>
                 </div>
                 <div class="layui-card">
-                    <div class="layui-card-header">    
-                        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_exam.html',700,400)"><i class="layui-icon"></i>添加</button>
+                    <div class="layui-card-header">
+                        @*<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>*@
                     </div>
                     <div class="layui-card-body layui-table-body layui-table-main">
                         <table class="layui-table layui-form">
                             <thead>
                                 <tr>
-
+                                    <th>
+                                        <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
+                                    </th>
                                     <th>类型</th>
-                                    <th>试卷名</th>
-                                    <th>难度</th>
-                                    <th>出卷人</th>
-                                    <th>限制时间</th>
-                                    <th>考试码</th>
-                                    <th>发布日期</th>
-                                    <th>备注</th>
+                                    <th>题目</th>
+                                    <th>内容</th>
+                                    <th>正确答案</th>                               
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in ViewBag.exams)
+                                @foreach (var item in ViewBag.tests)
                                 {
                                 <tr>
-                                    <td>@item.Subject</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Grade</td>
-                                    <td>@item.PublisherNavigation.name</td>
-                                    <td>@item.Time.Split('`')[0] 时  @item.Time.Split('`')[1] 分 </td>
-                                    <td>@item.Code</td>
-                                    <th>@item.PublishTime</th>
-                                    <td>@item.Remark</td>
-                                    <td class="td-manage">                                   
-                                        <a title="编辑信息" onclick="xadmin.open('编辑','/exam/editexam?id=@item.Id',600,400)" href="javascript:;">
-                                            <i class="layui-icon">    &#xe716;</i>
-                                        </a>
-                                        <a title="分配题目" onclick="xadmin.open('编辑','/exam/ChooseTest?exam=@item.Id',1000,800)" href="javascript:;">
-                                            <i class="layui-icon">&#xe642;</i>
-                                        </a>
-                                        <a title="查看题目" onclick="xadmin.open('查看题目','/exam/SearchTest?id=@item.Id',600,400)" href="javascript:;">
-                                            <i class="layui-icon">&#xe615;</i>
-                                        </a>
-                                        <a title="删除" onclick="member_del(this,'@item.Id')" href="javascript:;">
+                                    <td>
+                                        <input type="checkbox" name="id" value="@item.Test.Id" lay-skin="primary">
+                                    </td>
+                                    <td>@item.Test.Subject</td>
+                                    <td>@item.Test.Title</td>
+                                    @{
+                                        if (item.Test.Type == "choice")
+                                        {
+                                            item.Test.Content = $"选项A： {item.Test.Content.Split('`')[0]}；选项B： {item.Test.Content.Split('`')[1]}；" +
+                                             $"选项C： {item.Test.Content.Split('`')[2]}；选项D： {item.Test.Content.Split('`')[3]}；";
+                                        }
+                                        }
+                                    <td>@item.Test.Content</td>
+                                    <td>@item.Test.Answer</td>
+                                    <td class="td-manage">
+                                        <a title="删除" onclick="member_del(this,'@item.Test.Id')" href="javascript:;">
                                             <i class="layui-icon">&#xe640;</i>
                                         </a>
                                     </td>
@@ -195,11 +187,12 @@
       }
 
       /*用户-删除*/
+           /*用户-删除*/
       function member_del(obj,id){
           layer.confirm('确认要删除吗？',function(index){
               //发异步删除数据
                          $.ajax({
-                         url: '/test/DeleteExam',
+                         url: '/exam/deletetest?exam='+ @ViewBag.Exam,
                          type:'post',
                          dataType:'text',
                          data:"id="+id,
@@ -220,6 +213,7 @@
               layer.msg('已删除!',{icon:1,time:1000});
           });
       }
+
 
 
 

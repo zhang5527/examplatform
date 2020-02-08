@@ -79,10 +79,10 @@
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData"> 添加选中行</button>
-        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加选择 </button>
-        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加填空 </button>
-        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加判断 </button>
-        <button class="layui-btn layui-btn-sm" lay-event="addUser">手动添加问答 </button>
+        <button class="layui-btn layui-btn-sm"  onclick="xadmin.open('添加选择题','/html/add_choice.html?id=@ViewBag.id',700,400)">手动添加选择 </button>
+        <button class="layui-btn layui-btn-sm" onclick="xadmin.open('添加选择题','/html/add_blank.html?id=@ViewBag.id',700,400)">手动添加填空 </button>
+        <button class="layui-btn layui-btn-sm" onclick="xadmin.open('添加选择题','/html/add_judge.html?id=@ViewBag.id',700,400)">手动添加判断 </button>
+        <button class="layui-btn layui-btn-sm" onclick="xadmin.open('添加选择题','/html/add_answer.html?id=@ViewBag.id',700,400)">手动添加问答 </button>
     </div>
 </script>
 <script type="text/html" id="switchTpl">

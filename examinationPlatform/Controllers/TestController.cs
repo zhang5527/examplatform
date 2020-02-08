@@ -18,10 +18,14 @@ namespace examinationPlatform.Controllers
     {
         private ITestStorage Test;
         private readonly IWebHostEnvironment _hostingEnvironment;
-        public TestController(ITestStorage test, IWebHostEnvironment hostingEnvironment)
+        private IExamService Exam;
+        private readonly IAdminService admin;
+        public TestController(IExamService examService,ITestStorage test, IWebHostEnvironment hostingEnvironment, IAdminService adminService)
         {
+            Exam = examService;
             Test = test;
             _hostingEnvironment = hostingEnvironment;
+            admin = adminService;
         }
         public IActionResult TestIndex()
         {       
@@ -119,6 +123,12 @@ namespace examinationPlatform.Controllers
         {
             test.PublishDate = DateTime.Now.ToString("yyyy-MM-dd");
             string type = HttpContext.Request.Query["type"];
+            string direct= HttpContext.Request.Query["direct"];
+            string account = HttpContext.Session.GetString("admin");
+            test.Publisher = admin.GetByAccount(account).Id;
+            if (direct != "") {
+                test.Grade = "exam";          
+            }
             switch (type)
             {
                 case "choice":
@@ -136,7 +146,12 @@ namespace examinationPlatform.Controllers
                 default:
                     break;
             }
-            if (Test.AddTest(test)) {
+            var a = Test.AddTest(test);
+            if (a!=null) {
+                if (direct != "")
+                {
+                    Exam.AddTestToExam(new List<ExamContent>() { new ExamContent { ExamId = Convert.ToInt32(direct), TestId = a.Id } });
+                }
                 return Content("1");            
             }
             else

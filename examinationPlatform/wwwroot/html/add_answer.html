@@ -123,7 +123,7 @@
                             $.ajax({
                                type: "POST",
                                dataType: "json",
-                               url: "/Test/AddTest?type=answer",
+                               url: "/Test/AddTest?type=answer&direct="+ args.id,
                                contentType: "application/json",
                                data: JSON.stringify(choice),
                                success: function (data) {

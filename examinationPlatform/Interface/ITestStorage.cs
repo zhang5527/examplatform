@@ -9,7 +9,7 @@ namespace examinationPlatform.Interface
 {
     public interface ITestStorage
     {
-        bool AddTest(TestStorage test);
+        TestStorage AddTest(TestStorage test);
 
         void ModifyTest(TestStorage test);
 

@@ -132,7 +132,10 @@
                 </form>
             </div>
         </div>
-        <script>layui.use(['form', 'layer'],
+        <script>
+       
+
+            layui.use(['form', 'layer'],
             function() {
                 $ = layui.jquery;
                 var form = layui.form,
@@ -157,6 +160,8 @@
                 form.on('submit(add)',
                     function (data) {
                         //发异步，把数据提交给后台
+                        var args = getQueryArgs();
+                        console.log(args);
                         console.log(data.field);
                         choice.Title = data.field.Title;
                         choice.Answer = data.field.Answer;
@@ -168,7 +173,7 @@
                         $.ajax({
                             type: "POST",
                             dataType: "json",
-                            url: "/Test/AddTest",
+                            url: "/Test/AddTest?type=choice&direct=" + args.id,
                             contentType: "application/json",
                             data: JSON.stringify(choice),
                             success: function (data) {

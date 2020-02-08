@@ -20,5 +20,8 @@ namespace examinationPlatform.Interface
 
         void AddTestToExam(List<ExamContent> contents);
 
+        ICollection<ExamContent> FindAllTest(int ExamId);
+
+        void DeleteTest(int ExamId,int TestId);
     }
 }
