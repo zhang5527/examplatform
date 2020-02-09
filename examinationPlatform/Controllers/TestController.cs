@@ -298,6 +298,7 @@ namespace examinationPlatform.Controllers
                             break;
                     }
                     if (FalseFlag == 1) break;
+                    test.PublishDate = DateTime.Now.ToString("yyyy-MM-dd");
                     if (Test.JudgeIsExist(item[0].ToString())) continue;
                     Test.AddTest(test);
                 }

@@ -36,6 +36,8 @@ namespace examinationPlatform
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ITestStorage, TestService>();
             services.AddScoped<IExamService, ExamService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddMemoryCache();
             services.AddDbContext<exam_platformContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlConnection")));
         }
 

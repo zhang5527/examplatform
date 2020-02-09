@@ -8,8 +8,12 @@ namespace examinationPlatform.Interface
 {
     public interface IUserService
     {
-        bool login(Users user);
+         Users login(string account,string password);
 
-        void GetTests(Common.TestSort sort,int count,string method);
+        Users GetUser(string account);
+        bool collect(int UserId, int TestId);
+        IQueryable<TestStorage> GetTests(string sort,int count,string method,string difficulty,Users user);
+
+        void RecordTest(int testid, string answer, int userid,int state);
     }
 }

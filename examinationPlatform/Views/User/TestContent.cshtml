@@ -1,0 +1,151 @@
+﻿
+@{
+    Layout = null;
+}
+@model examinationPlatform.Models.TestStorage
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="~/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/choice.css">
+    <link rel="stylesheet" href="../css/layui.css">
+    <script src="../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row ">
+            <div class="layui-col-md10 layui-col-md-offset1  bg" style="margin-top: 20px;">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        第  @(Convert.ToInt32(ViewData["point"])+1) 题
+                        <span class="choice-btn right"  onclick="ToCollect(@Model.Id)">
+                            收藏
+                        </span>
+                        <span class="choice-btn right" onclick="openUrl('/user/testcontent',@Convert.ToInt32(ViewData["point"])+1) ">
+                            下一题
+                        </span>
+                        <span class="choice-btn right">
+                            上一题
+                        </span>
+
+                    </div>
+                    <div class="layui-card-body">
+                        <div class="title">
+                            @Model.Title
+                        </div>
+                        @if (Model.Type == "choice") { 
+                        <div class="desc">
+                            <p></p><p>A:@Model.Content.Split('`')[0]</p><p>B: @Model.Content.Split('`')[1]</p><p>C:@Model.Content.Split('`')[2]</p><p>D:@Model.Content.Split('`')[3]</p><p></p>
+                        </div>
+                        
+                        <form class="layui-form content" action="">
+                            <div class="layui-form-item">
+                                <input type="radio" name="no1" value="A" title="A">
+                                <input type="radio" name="no1" value="B" title="B">
+                                <input type="radio" name="no1" value="C" title="C">
+                                <input type="radio" name="no1" value="D" title="D">
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block" style="margin-left: 0px;">
+                                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                </div>
+                            </div>
+                        </form>
+                        }
+                        <div class="right-answer desc layui-row hide">
+                            <div class="layui-col-md1">
+                                <span class="choice-btn " style="cursor: default;">正确答案</span>
+                            </div>
+                            <div class="layui-col-md11" style="margin-top: 8px; font-weight: bold;">
+                                @Model.Answer
+                            </div>
+                        </div>
+                        <div class="right-explain desc layui-row hide">
+                            <div class="layui-col-md1">
+                                <span class="choice-btn " style="cursor: default;">答案解析</span>
+                            </div>
+                            <div class="layui-col-md11" style="margin-top: 8px; font-weight: bold;">
+                                @Model.Explain
+                            </div>
+                        </div>
+                        <script>
+                            //Demo
+                             
+                            layui.use('form', function(){
+                                var form = layui.form;
+                              //监听提交
+                                form.on('submit(formDemo)', function (data) {
+                                    if (data.field.no1 == '@Model.Answer') {
+                                        $.ajax({
+                                            url: '/user/RecordHistory?result=1',
+                                            type: 'post',
+                                            dataType: 'text',
+                                            data: { testid:@Model.Id, answer: data.field.no1},
+                                            success: function (data) {
+                                                console.log(data);
+                                            },
+                                            'error': function () {
+                                                layer.msg('系统错误');
+                                            }
+                                        })
+                                        layer.msg('答对了。。酷毙了', { icon: 1 });
+                                    }
+                                    else {
+                                            $.ajax({
+                                            url: '/user/RecordHistory?result=0',
+                                            type: 'post',
+                                            dataType: 'text',
+                                            data: { testid:@Model.Id, answer: data.field.no1},
+                                            success: function (data) {
+                                                console.log(data);
+                                            },
+                                            'error': function () {
+                                                layer.msg('系统错误');
+                                            }
+                                        })
+                                             layer.msg('答错了。。不开心', { icon: 5 });
+                                    }
+                                    $('.right-answer').removeClass("hide");
+                                return false;
+                              });
+                            });
+                            function openUrl(url, point) {
+
+                                url += "?point=" + point;
+                                location.replace(url);
+                            }
+                            function ToCollect(id) {
+                                $.ajax({
+                                    url: '/user/CollectTest',
+                                    type: 'post',
+                                    dataType: 'text',
+                                    data: "id=" + id,
+                                    success: function (data) {
+                                        console.log(data);
+                                        if (data == '1') {
+                                            layer.msg('收藏成功');
+                                            table.reload(obj.config.id, {});
+                                        } else if(data=='0') {
+                                            layer.msg('收藏已存在');
+                                        }
+                                    },
+                                    'error': function () {
+                                        layer.msg('系统错误');
+                                    }
+                                })
+                            }
+                        </script>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
