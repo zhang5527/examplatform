@@ -1,0 +1,95 @@
+﻿
+@{
+    Layout = null;
+}
+@model List<examinationPlatform.Models.ExamStorage>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/layui.css">
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <title>Document</title>
+    <style>
+        .shorttitle {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            line-height: 32px;
+        }
+
+        .intro {
+            clear: both;
+            overflow: hidden;
+            font-size: 14px;
+            line-height: 21px;
+            color: #999999;
+        }
+
+        .desc {
+            margin-top: 10px;
+            color: #333333;
+        }
+
+        .toolbar {
+            font-size: 12px;
+            color: #999999;
+        }
+
+        .padding {
+            position: relative;
+            margin-top: 8px;
+            padding: 10px;
+            border-radius: 2px;
+            border-bottom: 1px solid gainsboro;
+        }
+
+            .padding:hover {
+                background-color: gainsboro;
+            }
+
+        .more {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">
+                试卷列表
+            </div>
+            <div class="layui-card-body">
+                <ul class="list-unstyled list-img">
+                    @foreach (var item in Model)
+                    {
+                        <li class="border padding">
+                            <h4 class="shorttitle">@item.Name</h4>
+                            <div class="intro">
+                                <div class="desc">
+                                    <p class="toolbar">
+                                        <a class="badge">总分：100 分</a>
+                                        <a class="badge">及格分：60 分</a>
+                                        <a class="badge">时间：@item.Time 分钟</a>
+                                    </p>
+                                    <p class="toolbar">
+                                        <a action-before="clearStorage" href="/user/exam_begin?id=@item.Id" class="ajax btn btn-info pull-right more" target="_blank" >开始考试</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

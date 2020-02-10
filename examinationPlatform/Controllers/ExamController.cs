@@ -146,6 +146,7 @@ namespace examinationPlatform.Controllers
             List<ExamContent> contents = new List<ExamContent>();
             for (int i = 0; i < TestIds.Length; i++)
             {
+                if (Exam.JudgeIsExist(exam.Id, Convert.ToInt32(TestIds[i]))) continue;
                 contents.Add(new ExamContent { ExamId = exam.Id, TestId = Convert.ToInt32(TestIds[i]) });
             }
             Exam.AddTestToExam(contents);

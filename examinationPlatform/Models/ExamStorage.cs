@@ -9,6 +9,7 @@ namespace examinationPlatform.Models
         {
             ExamContent = new HashSet<ExamContent>();
             ExamRecord = new HashSet<ExamRecord>();
+            UserHistory = new HashSet<UserHistory>();
         }
 
         public int Id { get; set; }
@@ -29,5 +30,7 @@ namespace examinationPlatform.Models
         public virtual Users PublisherNavigation { get; set; }
         public virtual ICollection<ExamContent> ExamContent { get; set; }
         public virtual ICollection<ExamRecord> ExamRecord { get; set; }
+
+        public virtual ICollection<UserHistory> UserHistory { get; set; }
     }
 }

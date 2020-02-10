@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using examinationPlatform.Models;
 using examinationPlatform.Interface;
-using examinationPlatform.Service;
+using examinationPlatform.Common;
+using Json.Net;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace examinationPlatform.Controllers
@@ -15,17 +16,20 @@ namespace examinationPlatform.Controllers
     public class UserController : Controller
     {
         private IMemoryCache MemoryCache;
-
+        private ITestStorage Test;
         private IUserService UserService;
-        public UserController(IMemoryCache memoryCache,IUserService userService)
+        private IExamService ExamService;
+        public UserController(IMemoryCache memoryCache,IUserService userService,ITestStorage testStorage,IExamService exam)
         {
+            ExamService = exam;
+            Test = testStorage;
             MemoryCache = memoryCache;
             UserService = userService;
         }
         public IActionResult Index()
         {
             Users user = UserService.GetUser(HttpContext.Session.GetString("account"));
-            
+         
             return View();
         }       
         public IActionResult login ()
@@ -122,6 +126,126 @@ namespace examinationPlatform.Controllers
             int userId = UserService.GetUser(HttpContext.Session.GetString("account")).Id;
             UserService.RecordTest(testid, answer, userId, state);
             return Content("1");
+        }
+
+        public IActionResult exam_list()
+        {
+            return View(UserService.ExamList().ToList());
+        }
+
+        public IActionResult exam_begin()
+        {
+            int id = Convert.ToInt32(HttpContext.Request.Query["id"]);
+            int userId = UserService.GetUser(HttpContext.Session.GetString("account")).Id;
+            HttpContext.Session.SetInt32("examID", id);
+            UserService.RefreshStorage(id, userId);
+            var exams = UserService.GetTestsOfExam(id);
+            return View(exams);
+        }
+        public IActionResult exam_Result()
+        {
+            string js = HttpContext.Request.Form["data"];
+            var jss = JsonNet.Deserialize<List<ExamTest>>(js);
+            int testcount = jss.Count();  
+            List<UserHistory> histories = new List<UserHistory>();
+            Counter judegeC = new Counter() { All=0,right=0};
+            Counter choiceC = new Counter() { All = 0, right = 0 };
+            Counter blankC = new Counter() { All = 0, right = 0 };
+            int EachScore = 100 /jss.Count();
+            int score=0;
+            Users user = UserService.GetUser(HttpContext.Session.GetString("account"));
+            TestStorage test;
+            foreach (var item in jss)
+            {
+                if (item.value == "") item.value = "未填写";
+                test = Test.FindTestById(Convert.ToInt32(item.name));
+                if (test.Type == "choice")
+                {
+                    choiceC.All++;
+                    if(test.Answer==item.value)
+                    {
+                        score += EachScore;
+                        choiceC.right++;
+                        histories.Add(new UserHistory { Answer = item.value, State = 1, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                    else
+                    {
+                        histories.Add(new UserHistory { Answer = item.value, State = 0, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                }
+                else if (test.Type == "judege")
+                {
+                    judegeC.All++;
+                    if (test.Answer == item.value)
+                    {
+                        score += EachScore;
+                        judegeC.right++;
+                        histories.Add(new UserHistory { Answer = item.value, State = 1, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                    else
+                    {
+                        histories.Add(new UserHistory { Answer = item.value, State = 0, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                }
+                else if (test.Type == "blank")
+                {
+                    blankC.All++;
+                    if (test.Answer == item.value)
+                    {
+                        score += EachScore;
+                        blankC.right++;
+                        histories.Add(new UserHistory { Answer = item.value, State = 1, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                    else
+                    {
+                        histories.Add(new UserHistory { Answer = item.value, State = 0, UsersId = user.Id, ExamId = HttpContext.Session.GetInt32("examID"), TestId = test.Id });
+                    }
+                }
+            }
+            UserService.SaveExam(histories);
+            MemoryCache.Set<Counter>("judegeC", judegeC);
+            MemoryCache.Set<Counter>("choiceC", choiceC);
+            MemoryCache.Set<Counter>("blankC", blankC);
+            MemoryCache.Set<Counter>("choiceC", choiceC);
+            MemoryCache.Set("score", score);
+            MemoryCache.Set("EachScore", EachScore);
+            MemoryCache.Set("name", ExamService.FindExamById(Convert.ToInt32(HttpContext.Session.GetInt32("examID"))).Name);
+            //ViewBag.judegeC = judegeC;
+            //ViewBag.choiceC = choiceC;
+            //ViewBag.blankC = blankC;
+            //ViewBag.score = score;
+            //ViewBag.eachscore = EachScore;
+            //ViewBag.name =;
+            return Content("/user/exam_Result1");
+            //return View("/user/resultpage?examid"+ HttpContext.Session.GetInt32("examID").ToString());
+        }
+
+        public IActionResult exam_Result1() {
+            ViewBag.judegeC = MemoryCache.Get<Counter>("judegeC"); 
+            ViewBag.choiceC = MemoryCache.Get<Counter>("choiceC");
+            ViewBag.blankC = MemoryCache.Get<Counter>("blankC");
+            ViewBag.score = MemoryCache.Get("score");
+            ViewBag.eachscore = MemoryCache.Get("eachscore");
+            ViewBag.name = MemoryCache.Get("name");
+            return View();
+        
+        }
+
+        public IActionResult ResultPage()
+        {
+            int userID;
+            int examID;
+            if (HttpContext.Request.Query["userid"] == "")
+            {
+                userID = Convert.ToInt32(HttpContext.Request.Query["userid"]);
+            }
+            else
+            {
+                userID= UserService.GetUser(HttpContext.Session.GetString("account")).Id;
+            }
+            examID= Convert.ToInt32(HttpContext.Request.Query["examid"]);
+            var tests = UserService.GetExamHistory(userID, examID);
+            return View(tests);
         }
     }
 }

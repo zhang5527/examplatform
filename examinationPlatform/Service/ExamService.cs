@@ -52,11 +52,15 @@ namespace examinationPlatform.Service
             return CreateService<ExamStorage>().Entities.Include(a => a.ExamContent).ThenInclude(a => a.Test).FirstOrDefault(a=>a.Id==ExamId).ExamContent;
         }
 
- 
 
         public void DeleteTest(int ExamId, int TestId)
         {
             CreateService<ExamContent>().Delete(a => a.ExamId == ExamId && a.TestId == TestId);
+        }
+
+        public bool JudgeIsExist(int ExamId, int TestId)
+        {
+            return CreateService<ExamContent>().Count(a => a.ExamId == ExamId && a.TestId == TestId)>0;
         }
     }
 }

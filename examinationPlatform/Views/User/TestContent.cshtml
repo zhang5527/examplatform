@@ -29,7 +29,7 @@
                         <span class="choice-btn right" onclick="openUrl('/user/testcontent',@Convert.ToInt32(ViewData["point"])+1) ">
                             下一题
                         </span>
-                        <span class="choice-btn right">
+                        <span class="choice-btn right" onclick="openUrl('/user/testcontent',@Convert.ToInt32(ViewData["point"])-1)">
                             上一题
                         </span>
 
@@ -38,24 +38,62 @@
                         <div class="title">
                             @Model.Title
                         </div>
-                        @if (Model.Type == "choice") { 
-                        <div class="desc">
-                            <p></p><p>A:@Model.Content.Split('`')[0]</p><p>B: @Model.Content.Split('`')[1]</p><p>C:@Model.Content.Split('`')[2]</p><p>D:@Model.Content.Split('`')[3]</p><p></p>
-                        </div>
-                        
-                        <form class="layui-form content" action="">
-                            <div class="layui-form-item">
-                                <input type="radio" name="no1" value="A" title="A">
-                                <input type="radio" name="no1" value="B" title="B">
-                                <input type="radio" name="no1" value="C" title="C">
-                                <input type="radio" name="no1" value="D" title="D">
+                        @if (Model.Type == "choice")
+                        {
+                            <div class="desc">
+                                <p></p><p>A:@Model.Content.Split('`')[0]</p><p>B: @Model.Content.Split('`')[1]</p><p>C:@Model.Content.Split('`')[2]</p><p>D:@Model.Content.Split('`')[3]</p><p></p>
                             </div>
-                            <div class="layui-form-item">
-                                <div class="layui-input-block" style="margin-left: 0px;">
-                                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+
+                            <form class="layui-form content" action="">
+                                <div class="layui-form-item">
+                                    <input type="radio" name="no1" value="A" title="A">
+                                    <input type="radio" name="no1" value="B" title="B">
+                                    <input type="radio" name="no1" value="C" title="C">
+                                    <input type="radio" name="no1" value="D" title="D">
                                 </div>
-                            </div>
-                        </form>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block" style="margin-left: 0px;">
+                                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                        @{ else if (Model.Type == "blank")
+                            {
+                                <form class="layui-form content" action="">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <input type="text" name="title" required lay-verify="required" placeholder="请输入答案" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            }
+
+
+                        }
+                        @{ else if (Model.Type == "judge")
+                            {
+                                <form class="layui-form content" action="">
+                                    <div class="layui-form-item">
+                                        <input type="radio" name="no1" value="true" title="正确">
+                                        <input type="radio" name="no1" value="false" title="错误">
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            }
+
+
                         }
                         <div class="right-answer desc layui-row hide">
                             <div class="layui-col-md1">
@@ -75,7 +113,7 @@
                         </div>
                         <script>
                             //Demo
-                             
+
                             layui.use('form', function(){
                                 var form = layui.form;
                               //监听提交
@@ -115,7 +153,9 @@
                               });
                             });
                             function openUrl(url, point) {
-
+                                if (point == -1) {
+                                    return;
+                                }
                                 url += "?point=" + point;
                                 location.replace(url);
                             }

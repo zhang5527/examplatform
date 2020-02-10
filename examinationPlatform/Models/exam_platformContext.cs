@@ -276,6 +276,8 @@ namespace examinationPlatform.Models
 
                 entity.Property(e => e.TestId).HasColumnName("test_id");
 
+                entity.Property(e => e.ExamId).HasColumnName("exam_id");
+
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("update_date")
                     .HasMaxLength(1000)
@@ -292,6 +294,11 @@ namespace examinationPlatform.Models
                     .WithMany(p => p.UserHistory)
                     .HasForeignKey(d => d.UsersId)
                     .HasConstraintName("FK__user_hist__users__21B6055D");
+
+                entity.HasOne(d => d.Exam)
+               .WithMany(p => p.UserHistory)
+               .HasForeignKey(d => d.ExamId)
+               .HasConstraintName("FK_user_history_exam_storage");
             });
 
             modelBuilder.Entity<Users>(entity =>

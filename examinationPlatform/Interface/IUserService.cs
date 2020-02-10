@@ -15,5 +15,10 @@ namespace examinationPlatform.Interface
         IQueryable<TestStorage> GetTests(string sort,int count,string method,string difficulty,Users user);
 
         void RecordTest(int testid, string answer, int userid,int state);
+        IQueryable<ExamStorage> ExamList();
+        ExamStorage GetTestsOfExam(int ExamId);
+        void SaveExam(List<UserHistory> histories);
+        void RefreshStorage(int ExamId, int UserId);
+        IQueryable<UserHistory> GetExamHistory(int ExamId, int UserId);
     }
 }

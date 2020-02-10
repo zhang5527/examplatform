@@ -23,5 +23,7 @@ namespace examinationPlatform.Interface
         ICollection<ExamContent> FindAllTest(int ExamId);
 
         void DeleteTest(int ExamId,int TestId);
+
+        bool JudgeIsExist(int ExamId, int TestId);
     }
 }

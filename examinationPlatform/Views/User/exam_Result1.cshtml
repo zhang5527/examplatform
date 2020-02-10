@@ -1,0 +1,116 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/layui.css">
+    <link rel="stylesheet" href="/css/score.css">
+    <script src="/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/xadmin.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-col-md10 layui-col-md-offset1">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    考试结果
+                </div>
+                <div class="layui-card-body">
+                    <h3 class="shorttitle text-center">演示试卷一</h3>
+                    <div class="layui-row">
+                        <div class="layui-col-md4">
+                            <h1 class="text-center text-danger" style="margin-top: -5PX;">@ViewBag.score 分</h1>
+                        </div>
+                        <div class="layui-col-md8">
+                            @if (ViewBag.score >= 60)
+                            {
+                                <div><b class="text-success"> 恭喜你通过本次考试！</b></div>
+                            }
+                            @{else
+                                {
+
+                                    <div><b class="text-danger"> 很遗憾您未通过本次考试！</b></div>
+                                } }
+                            <p>
+                                总分：<b class="text-warning">100</b>分 合格分数线：<b class="text-warning">60</b>分
+                            </p>
+                        </div>
+                    </div>
+                    <div class="layui-col-md12">
+                        <h5 class="text-info padding">得分详情：</h5>
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr class="info">
+                                    <th>题型</th>
+                                    <th>总题数</th>
+                                    <th>答对题数</th>
+                                    <th>总分</th>
+                                    <th>得分</th>
+                                </tr>
+                                <tr>
+                                    <td>单选题</td>
+                                    <td>@ViewBag.choiceC.All </td>
+                                    <td>@ViewBag.choiceC.right</td>
+                                    <td>@(ViewBag.choiceC.All * ViewBag.eachscore) </td>
+                                    <td>@(ViewBag.choiceC.right * ViewBag.eachscore)</td>
+                                </tr>
+                                <tr>
+                                    <td>填空题</td>
+                                    <td>@ViewBag.blankC.All </td>
+                                    <td>@ViewBag.blankC.right</td>
+                                    <td>@(ViewBag.blankC.All * ViewBag.eachscore) </td>
+                                    <td>@(ViewBag.blankC.right * ViewBag.eachscore)</td>
+                                </tr>
+                                <tr>
+                                    <td>判断题</td>
+                                    <td>@ViewBag.judegeC.All </td>
+                                    <td>@ViewBag.judegeC.right</td>
+                                    <td>@(ViewBag.judegeC.All * ViewBag.eachscore) </td>
+                                    <td>@(ViewBag.judegeC.right * ViewBag.eachscore)</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" align="left">
+                                        本次考试共<b class="text-warning">@(ViewBag.blankC.All + ViewBag.choiceC.All + ViewBag.judegeC.All)</b>道题，总分<b class="text-warning">100</b>分，您做对<b class="text-warning">@(ViewBag.blankC.right + ViewBag.choiceC.right + ViewBag.judegeC.right)</b>道题，得到<b class="text-warning">@ViewBag.score </b>分
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h5 class="text-info padding">知识点分析：</h5>
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr class="info">
+                                    <th>知识点</th>
+                                    <th>总题数</th>
+                                    <th>答对题数</th>
+                                    <th>正确率</th>
+                                </tr>
+                                <tr>
+                                    <td>党课</td>
+                                    <td>@(ViewBag.blankC.All + ViewBag.choiceC.All + ViewBag.judegeC.All)</td>
+                                    <td>@(ViewBag.blankC.right + ViewBag.choiceC.right + ViewBag.judegeC.right)</td>
+                                    <td>@(1.0 * (ViewBag.blankC.right + ViewBag.choiceC.right + ViewBag.judegeC.right) / (ViewBag.blankC.All + ViewBag.choiceC.All + ViewBag.judegeC.All))</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center">
+                        <a href=""
+                           class="layui-btn">查看答案和解析</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" class="layui-btn">进入我的考试记录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

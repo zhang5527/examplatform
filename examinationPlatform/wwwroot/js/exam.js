@@ -44,13 +44,29 @@ function clock()
  }
 
 }
-function getData(){
-  var params = $('input').serializeArray();
-  console.log('123')
-  console.log(params);
-  localStorage.setItem("data",JSON.stringify(params));
-  console.log(localStorage.getItem("data"))
+function getData() {
+    var params = $('input').serializeArray();
+    console.log('123')
+    console.log(params);
+    params = [];
+    $('input').each(function (index, element) {
+        if ($(element).attr("value") != "") {
+            params.push(element);
+        }
+    })
+    localStorage.setItem("data", JSON.stringify(params));
+    console.log(localStorage.getItem("data"))
+    console.log($(params).serializeArray());
+    return ($(params).serializeArray())
 }
+//function getData(){
+//  var params = $('input').serializeArray();
+//  console.log('123')
+//    console.log(params);
+
+//  localStorage.setItem("data",JSON.stringify(params));
+//  console.log(localStorage.getItem("data"))
+//}
 function test(){
     initata=$.parseJSON(localStorage.getItem("data"));
     for(name in initata){
