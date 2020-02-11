@@ -205,11 +205,11 @@ namespace examinationPlatform.Controllers
             UserService.SaveExam(histories);
             MemoryCache.Set<Counter>("judegeC", judegeC);
             MemoryCache.Set<Counter>("choiceC", choiceC);
-            MemoryCache.Set<Counter>("blankC", blankC);
-            MemoryCache.Set<Counter>("choiceC", choiceC);
+            MemoryCache.Set<Counter>("blankC", blankC);           
             MemoryCache.Set("score", score);
             MemoryCache.Set("EachScore", EachScore);
-            MemoryCache.Set("name", ExamService.FindExamById(Convert.ToInt32(HttpContext.Session.GetInt32("examID"))).Name);
+            MemoryCache.Set("name", ExamService.FindExamById(Convert.ToInt32(HttpContext.Session.GetInt32("examID"))));
+            UserService.AddExamHistory(user.Id,Convert.ToInt32(HttpContext.Session.GetInt32("examID")), judegeC.All - judegeC.right + choiceC.All - choiceC.right + blankC.All - blankC.right, score);
             //ViewBag.judegeC = judegeC;
             //ViewBag.choiceC = choiceC;
             //ViewBag.blankC = blankC;
@@ -225,17 +225,16 @@ namespace examinationPlatform.Controllers
             ViewBag.choiceC = MemoryCache.Get<Counter>("choiceC");
             ViewBag.blankC = MemoryCache.Get<Counter>("blankC");
             ViewBag.score = MemoryCache.Get("score");
-            ViewBag.eachscore = MemoryCache.Get("eachscore");
-            ViewBag.name = MemoryCache.Get("name");
-            return View();
-        
+            ViewBag.eachscore = MemoryCache.Get("EachScore");
+            ViewBag.exam = MemoryCache.Get<ExamStorage>("name");
+            return View();       
         }
 
         public IActionResult ResultPage()
         {
             int userID;
             int examID;
-            if (HttpContext.Request.Query["userid"] == "")
+            if (HttpContext.Request.Query["userid"].Count()>0)
             {
                 userID = Convert.ToInt32(HttpContext.Request.Query["userid"]);
             }
@@ -244,8 +243,40 @@ namespace examinationPlatform.Controllers
                 userID= UserService.GetUser(HttpContext.Session.GetString("account")).Id;
             }
             examID= Convert.ToInt32(HttpContext.Request.Query["examid"]);
-            var tests = UserService.GetExamHistory(userID, examID);
+            var tests = UserService.GetExamHistory(examID, userID);
             return View(tests);
+        }
+
+        public IActionResult GetExamHistory()
+        {
+            var histories = UserService.GetExamHistory().ToList();
+            double  avg=histories.Average(a => Convert.ToInt32(a.Score));
+            return View();
+        }
+
+        public IActionResult ExamCode()
+        {
+            string code = HttpContext.Request.Query["code"];    
+            var exam =UserService.GetExamByCode(code);
+            try
+            {
+                return Redirect("/user/exam_begin?id=" + exam.Code);
+            }
+            catch (Exception)
+            {
+                return new ContentResult()
+                {
+                    Content = "<script>alert('不存在此验证码');history.go('-1');</script>",
+                    ContentType = "text/html;charset=utf-8"
+                };
+            }     
+        }
+
+        public IActionResult UserCollection()
+        {
+            var user = UserService.GetUser(HttpContext.Session.GetString("account"));
+            var  collection=UserService.GetCollectionById(user.Id);
+            return View(collection);
         }
     }
 }

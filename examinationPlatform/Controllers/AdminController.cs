@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using examinationPlatform.Common.filter;
 
 namespace examinationPlatform.Controllers
 {
+
     public class AdminController : Controller
     {
 
@@ -24,12 +26,13 @@ namespace examinationPlatform.Controllers
             _hostingEnvironment = hostingEnvironment;
             Admin = admin;
         }
+        [AuthFilter]
         public IActionResult Index()
         {
             return View();
         }
-
-        
+       
+      
         public IActionResult login(Users user)
         {
             if (HttpContext.Request.Method == "GET")
@@ -52,6 +55,7 @@ namespace examinationPlatform.Controllers
             }
 
         }
+        [AuthFilter]
         public IActionResult GetUsers()
         { 
                 return View();      
@@ -69,6 +73,7 @@ namespace examinationPlatform.Controllers
             );
         }
         [HttpGet]
+        [AuthFilter]
         public IActionResult FindUser(string name)
         {
           var user=Admin.FindUser(name);
@@ -82,8 +87,13 @@ namespace examinationPlatform.Controllers
         );
         }
         [HttpPost]
+        [AuthFilter]
         public IActionResult AddOneUser([FromBody] Users user)
         {
+            if (HttpContext.Request.Query["type"] == "admin")
+            {
+                user.UserGroup = 2;
+            }
             if (Admin.AddUser(user)) {
                 return Content("1");            
             }
@@ -93,12 +103,14 @@ namespace examinationPlatform.Controllers
             }
         }
         [HttpPost]
+        [AuthFilter]
         public IActionResult ModifyUser([FromBody] Users user)
         {
             Admin.ModifyUser(user);
             return Content("1");
         }
         [HttpPost]
+        [AuthFilter]
         public IActionResult RemoveUsers()
         {
            string id=HttpContext.Request.Form["id"];
@@ -143,6 +155,12 @@ namespace examinationPlatform.Controllers
                 }
             }
             return Content("1");
+        }
+             [AuthFilter]
+        public IActionResult GetAdmins()
+        {
+            ViewBag.admins = Admin.GetAdmins();
+            return View();
         }
     }
 }

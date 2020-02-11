@@ -125,7 +125,7 @@ namespace examinationPlatform.Controllers
             string type = HttpContext.Request.Query["type"];
             string direct= HttpContext.Request.Query["direct"];
             string account = HttpContext.Session.GetString("admin");
-            test.Publisher = admin.GetByAccount(account).Id;
+            test.Publisher = admin.GetByAccount(account).name;
             if (direct != "") {
                 test.Grade = "exam";          
             }

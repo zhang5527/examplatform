@@ -28,14 +28,14 @@ namespace examinationPlatform.Service
         public IQueryable<ExamStorage> FindAllExam(string search = "")
         {
             if(search==""||search==null)
-            return  CreateService<ExamStorage>().GetAll().Include(a=>a.PublisherNavigation);
+            return  CreateService<ExamStorage>().GetAll();
             else
             return CreateService<ExamStorage>().Where(a=>a.Group.Contains(search)||a.Name.Contains(search));
         }
 
         public ExamStorage FindExamById(int id)
         {
-            return CreateService<ExamStorage>().Entities.Include(a => a.PublisherNavigation).Include(a => a.ExamContent).ThenInclude(a=>a.Test).Where(a=>a.Id==id).FirstOrDefault();
+            return CreateService<ExamStorage>().Entities.Include(a => a.ExamContent).ThenInclude(a=>a.Test).Where(a=>a.Id==id).FirstOrDefault();
         }
 
         public void ModifyExam(ExamStorage Exam)

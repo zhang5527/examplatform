@@ -128,14 +128,18 @@ namespace examinationPlatform.Models
 
                 entity.Property(e => e.Group)
                     .HasColumnName("group_")
-                    .HasMaxLength(5)
+                    .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Name)
                     .HasColumnName("name")
                    .HasMaxLength(30)
                    .IsUnicode(false);
-                  
+
+                entity.Property(e => e.Publisher)
+                      .HasColumnName("Publisher")
+                     .HasMaxLength(50)
+                     .IsUnicode(false);
                 entity.Property(e => e.Remark)
                     .HasColumnName("remark")
                     .HasMaxLength(200)
@@ -162,10 +166,6 @@ namespace examinationPlatform.Models
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.PublisherNavigation)
-                    .WithMany(p => p.ExamStorage)
-                    .HasForeignKey(d => d.Publisher)
-                    .HasConstraintName("FK__exam_stor__publi__15502E78");
             });
 
             modelBuilder.Entity<Information>(entity =>
@@ -184,7 +184,11 @@ namespace examinationPlatform.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Publisher).HasColumnName("publisher");
+                entity.Property(e => e.Publisher)
+                   .HasColumnName("Publisher")
+                   .HasMaxLength(50)
+                   .IsUnicode(false);
+
 
                 entity.Property(e => e.Subject)
                     .HasColumnName("subject_")
@@ -195,11 +199,7 @@ namespace examinationPlatform.Models
                     .HasColumnName("title")
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.PublisherNavigation)
-                    .WithMany(p => p.Information)
-                    .HasForeignKey(d => d.Publisher)
-                    .HasConstraintName("FK__informati__publi__1B0907CE");
+  
             });
 
             modelBuilder.Entity<TestStorage>(entity =>
@@ -238,7 +238,6 @@ namespace examinationPlatform.Models
                     .HasMaxLength(30)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Publisher).HasColumnName("publisher");
 
                 entity.Property(e => e.Subject)
                     .HasColumnName("subject_")
@@ -250,15 +249,17 @@ namespace examinationPlatform.Models
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Publisher)
+                .HasColumnName("Publisher")
+                .HasMaxLength(50)
+                .IsUnicode(false);
+
                 entity.Property(e => e.Type)
                     .HasColumnName("type_")
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
-                entity.HasOne(d => d.PublisherNavigation)
-                    .WithMany(p => p.TestStorage)
-                    .HasForeignKey(d => d.Publisher)
-                    .HasConstraintName("FK__test_stor__publi__1273C1CD");
+
             });
 
             modelBuilder.Entity<UserHistory>(entity =>

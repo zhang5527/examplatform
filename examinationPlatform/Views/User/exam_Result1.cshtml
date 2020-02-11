@@ -26,7 +26,7 @@
                     考试结果
                 </div>
                 <div class="layui-card-body">
-                    <h3 class="shorttitle text-center">演示试卷一</h3>
+                    <h3 class="shorttitle text-center">@ViewBag.exam.Name</h3>
                     <div class="layui-row">
                         <div class="layui-col-md4">
                             <h1 class="text-center text-danger" style="margin-top: -5PX;">@ViewBag.score 分</h1>
@@ -61,8 +61,8 @@
                                     <td>单选题</td>
                                     <td>@ViewBag.choiceC.All </td>
                                     <td>@ViewBag.choiceC.right</td>
-                                    <td>@(ViewBag.choiceC.All * ViewBag.eachscore) </td>
-                                    <td>@(ViewBag.choiceC.right * ViewBag.eachscore)</td>
+                                    <td>@(1.0 * ViewBag.choiceC.All * ViewBag.eachscore) </td>
+                                    <td>@(1.0 * ViewBag.choiceC.right * ViewBag.eachscore)</td>
                                 </tr>
                                 <tr>
                                     <td>填空题</td>
@@ -104,7 +104,7 @@
                         </table>
                     </div>
                     <div class="text-center">
-                        <a href=""
+                        <a href="/user/resultpage?examid=@ViewBag.exam.Id"
                            class="layui-btn">查看答案和解析</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" class="layui-btn">进入我的考试记录</a>
                     </div>
                 </div>

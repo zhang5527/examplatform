@@ -40,7 +40,7 @@ namespace examinationPlatform.Controllers
             string account = HttpContext.Session.GetString("admin");
             if (exam.Code != "") { exam.Group = "验证码";               
             }
-            exam.Publisher = admin.GetByAccount(account).Id;
+            exam.Publisher = admin.GetByAccount(account).name;
             exam.PublishTime = DateTime.Now.ToString("yyyy-MM-dd");
             Exam.AddExam(exam);
             return Content("1");

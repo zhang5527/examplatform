@@ -1,0 +1,112 @@
+﻿
+@{
+    Layout = null;
+}
+@model IQueryable<Collection>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="~/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/choice.css">
+    <link rel="stylesheet" href="../css/layui.css">
+    <script src="../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-row ">
+            <div class="layui-col-md10 layui-col-md-offset1  bg" style="margin-top: 20px;">
+                <div class="layui-card">
+                    @foreach (var item in Model)
+                    {
+                    <div class="layui-card-body">
+                        <div class="title">
+                            @item.Test.Title
+                        </div>
+                        @if (item.Test.Type == "choice")
+                        {
+                            <div class="desc">
+                                <p></p><p>A:@item.Test.Content.Split('`')[0]</p><p>B: @item.Test.Content.Split('`')[1]</p><p>C:@item.Test.Content.Split('`')[2]</p><p>D:@item.Test.Content.Split('`')[3]</p><p></p>
+                            </div>
+
+                            <form class="layui-form content" action="">
+                                <div class="layui-form-item">
+                                    <input type="radio" name="no1" value="A" title="A">
+                                    <input type="radio" name="no1" value="B" title="B">
+                                    <input type="radio" name="no1" value="C" title="C">
+                                    <input type="radio" name="no1" value="D" title="D">
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block" style="margin-left: 0px;">
+                                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                    </div>
+                                </div>
+                            </form>
+                        }
+                        @{ else if (item.Test.Type == "blank")
+                            {
+                                <form class="layui-form content" action="">
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <input type="text" name="title" required lay-verify="required" placeholder="请输入答案" autocomplete="off" class="layui-input">
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            }
+
+
+                        }
+                        @{ else if (item.Test.Type == "judge")
+                            {
+                                <form class="layui-form content" action="">
+                                    <div class="layui-form-item">
+                                        <input type="radio" name="no1" value="true" title="正确">
+                                        <input type="radio" name="no1" value="false" title="错误">
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-input-block" style="margin-left: 0px;">
+                                            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                }
+                            }
+                            <div class="right-answer desc layui-row hide">
+                                <div class="layui-col-md1">
+                                    <span class="choice-btn " style="cursor: default;">正确答案</span>
+                                </div>
+                                <div class="layui-col-md11" style="margin-top: 8px; font-weight: bold;">
+                                    @item.Test.Answer
+                                </div>
+                            </div>
+                            <div class="right-explain desc layui-row hide">
+                                <div class="layui-col-md1">
+                                    <span class="choice-btn " style="cursor: default;">答案解析</span>
+                                </div>
+                                <div class="layui-col-md11" style="margin-top: 8px; font-weight: bold;">
+                                    @item.Test.Explain
+                                </div>
+                            </div>
+                                
+                    </div>
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

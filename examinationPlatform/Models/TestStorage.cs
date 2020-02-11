@@ -21,11 +21,10 @@ namespace examinationPlatform.Models
 
         public string difficulty { get; set; }
         public string Answer { get; set; }
-        public int? Publisher { get; set; }
+        public string Publisher { get; set; }
         public string PublishDate { get; set; }
         public string Explain { get; set; }
 
-        public virtual Users PublisherNavigation { get; set; }
         public virtual ICollection<Collection> Collection { get; set; }
         public virtual ICollection<ExamContent> ExamContent { get; set; }
         public virtual ICollection<UserHistory> UserHistory { get; set; }

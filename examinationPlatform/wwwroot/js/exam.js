@@ -5,17 +5,7 @@ minutes = 30,
 seconds = 0;
 var strh,strm,strs;
 var initata;
-$(document).ready(function(){
-    initata=localStorage.getItem("data");
-    if(seconds<10) strs="0"+seconds
-    if(minutes<10) strm="0"+minutes
-    if(hour<10) strh="0"+hour;
-    $('#timer_s').html(strs);
-    $('#timer_h').html(strh);
-    $('#timer_m').html(strm);    
-    var int=self.setInterval("clock()",1000);
-    // self.setInterval("getData()",3000);
-})
+
 
 function clock()
 {
@@ -46,16 +36,16 @@ function clock()
 }
 function getData() {
     var params = $('input').serializeArray();
-    console.log('123')
-    console.log(params);
     params = [];
     $('input').each(function (index, element) {
         if ($(element).attr("value") != "") {
             params.push(element);
         }
     })
-    localStorage.setItem("data", JSON.stringify(params));
+    localStorage.setItem("time", hour + ',' + minutes + ',' + seconds);
+    localStorage.setItem("data", JSON.stringify($(params).serializeArray()));
     console.log(localStorage.getItem("data"))
+    console.log(localStorage.getItem("time"))
     console.log($(params).serializeArray());
     return ($(params).serializeArray())
 }
@@ -67,11 +57,20 @@ function getData() {
 //  localStorage.setItem("data",JSON.stringify(params));
 //  console.log(localStorage.getItem("data"))
 //}
-function test(){
-    initata=$.parseJSON(localStorage.getItem("data"));
+function test() {
+    var a;
+    initata = $.parseJSON(localStorage.getItem("data"));
+    time = localStorage.getItem("time");
+    console.log(time);
+    if (time != null && time!=",,") {
+        a = time.split(',');
+        console.log(a);
+        hour = a[0];
+        minutes = a[1];
+        seconds = a[2];
+    }
     for(name in initata){
-        var v=initata[name];
-        console.log('我在运行',initata[name]);        
+        var v=initata[name];             
         var name=v.name;
         var value=v.value;
         $(":radio[name="+name+"]").each(function(){
@@ -79,9 +78,16 @@ function test(){
             if(value == that.val()){
                 console.log(value)
                 console.log('123')
-                that.prop("checked",true);        
+                that.prop("value", value);        
             }
         });
+        $("input[name=" + name + "]").each(function () {
+            var that = $(this);
+            if (value == that.val()) {
+                that.prop("checked", true);
+            }
+        });
+   
     }
     layui.use('form', function(){
         var form = layui.form;

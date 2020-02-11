@@ -3,7 +3,6 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html class="x-admin-sm">
 <head>
@@ -38,63 +37,37 @@
         <div class="layui-row layui-col-space15">
             <div class="layui-col-md12">
                 <div class="layui-card-body ">
-                    <form class="layui-form layui-col-space5">
-                        <div class="layui-inline layui-show-xs-block">
-                            <input type="text" name="search" placeholder="根据类型或标题搜索" autocomplete="off" class="layui-input">
-                        </div>
-                        <div class="layui-inline layui-show-xs-block">
-                            <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-                        </div>
-                    </form>
                 </div>
                 <div class="layui-card">
-                    <div class="layui-card-header">    
-                        <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_exam.html',700,400)"><i class="layui-icon"></i>添加</button>
+                    <div class="layui-card-header">
+                        <button class="layui-btn" onclick="xadmin.open('添加用户','/html/add_admin.html',600,400)"><i class="layui-icon"></i>添加</button>
                     </div>
                     <div class="layui-card-body layui-table-body layui-table-main">
                         <table class="layui-table layui-form">
                             <thead>
                                 <tr>
-
-                                    <th>类型</th>
-                                    <th>试卷名</th>
-                                    <th>难度</th>
-                                    <th>出卷人</th>
-                                    <th>限制时间</th>
-                                    <th>考试码</th>
-                                    <th>发布日期</th>
-                                    <th>备注</th>
+                                    <th>账号</th>
+                                    <th>管理员名</th>
+                                    <th>最后登录时间</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in ViewBag.exams)
+                                @foreach (var item in  ViewBag.admins)
                                 {
-                                <tr>
-                                    <td>@item.Subject</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Grade</td>
-                                    <td>@item.Publisher</td>
-                                    <td>@item.Time.Split('`')[0] 时  @item.Time.Split('`')[1] 分 </td>
-                                    <td>@item.Code</td>
-                                    <th>@item.PublishTime</th>
-                                    <td>@item.Remark</td>
-                                    <td class="td-manage">                                   
-                                        <a title="编辑信息" onclick="xadmin.open('编辑','/exam/editexam?id=@item.Id',600,400)" href="javascript:;">
-                                            <i class="layui-icon">    &#xe716;</i>
-                                        </a>
-                                        <a title="分配题目" onclick="xadmin.open('编辑','/exam/ChooseTest?exam=@item.Id',1000,800)" href="javascript:;">
-                                            <i class="layui-icon">&#xe642;</i>
-                                        </a>
-                                        <a title="查看题目" onclick="xadmin.open('查看题目','/exam/SearchTest?id=@item.Id',600,400)" href="javascript:;">
-                                            <i class="layui-icon">&#xe615;</i>
-                                        </a>
-                                        <a title="删除" onclick="member_del(this,'@item.Id')" href="javascript:;">
-                                            <i class="layui-icon">&#xe640;</i>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>@item.UserAccount</td>
+                                        <td>@item.name</td>
+                                        <td>@item.LastLogin</td>
+                                        <td class="td-manage">
+                                            <a title="编辑" onclick="xadmin.open('编辑','/admin/editadmin?id=@item.Id',600,400)" href="javascript:;">
+                                                <i class="layui-icon">&#xe642;</i>
+                                            </a>
+                                            <a title="删除" onclick="member_del(this,'@item.Id')" href="javascript:;">
+                                                <i class="layui-icon">&#xe640;</i>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -199,7 +172,7 @@
           layer.confirm('确认要删除吗？',function(index){
               //发异步删除数据
                          $.ajax({
-                         url: '/test/DeleteExam',
+                         url: '/admin/DeleteUser',
                          type:'post',
                          dataType:'text',
                          data:"id="+id,

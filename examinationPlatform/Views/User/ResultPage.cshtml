@@ -44,7 +44,7 @@
                     {
                         <div class="layui-card ">
                             <div class="layui-card-header">
-                                第 @i++ 题
+                                第 @i 题
                                 <span class="choice-btn right">
                                     收藏
                                 </span>
@@ -62,21 +62,20 @@
                                 <div class="desc">
                                     <p></p><p>A:@item.Test.Content.Split('`')[0]</p><p>B: @item.Test.Content.Split('`')[1]</p><p>C:@item.Test.Content.Split('`')[2]</p><p>D:@item.Test.Content.Split('`')[3]</p><p></p>
                                 </div>
- 
-
-
                             </div>
                         </div>
                     }
+                    i++;
                 }
                 @{
-                    i = 1;
+
                     <h1 style="padding:15px 0px; font-weight: bold;">二:填空题</h1>
                       foreach (var item in Model.Where(a=>a.Test.Type=="blank"))
                     {
+                   
                         <div class="layui-card ">
                             <div class="layui-card-header">
-                                第 @(i++) 题
+                                第 @(i) 题
                                 <span class="choice-btn right">
                                     收藏
                                 </span>
@@ -99,13 +98,14 @@
                                 </div>
                             </div>
                         </div>
+                             i++;
                     }
                     <h1 style="padding:15px 0px; font-weight: bold;">三:判断题</h1>
                       foreach (var item in Model.Where(a=>a.Test.Type=="judege"))
                     {
                         <div class="layui-card ">
                             <div class="layui-card-header">
-                                第 @(i++) 题
+                                第 @(i) 题
                                 <span class="choice-btn right">
                                     收藏
                                 </span>
@@ -123,6 +123,7 @@
                             </div>
                         </div>
                     }
+                    i++;
                 }
 
 

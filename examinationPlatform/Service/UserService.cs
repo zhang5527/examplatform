@@ -89,5 +89,30 @@ namespace examinationPlatform.Service
         {
            return  CreateService<UserHistory>().Entities.Include(a => a.Test).Where(a => a.UsersId == UserId && a.ExamId == ExamId);
         }
+
+        public void AddExamHistory(int userid,int examid,int wrongcount,int score)
+        {
+            CreateService<ExamRecord>().Add(new ExamRecord { UsersId = userid, PublishDate=DateTime.Now.ToString("yyyy-MM-dd"),ExamId = examid, WrongCount = wrongcount, Score = score.ToString() });
+        }
+
+        public IQueryable<ExamRecord> GetExamHistory()
+        {
+            return CreateService<ExamRecord>().GetAll(a=>a.PublishDate);
+        }
+
+        public ExamStorage GetExamByCode(string code)
+        {
+            return CreateService<ExamStorage>().Where(a => a.Code == code).FirstOrDefault();
+        }
+
+        public IQueryable<Collection> GetCollectionById(int userid)
+        {
+            return CreateService<Collection>().Entities.Include(a=>a.Test).Where(a => a.UsersId == userid);
+        }
+
+        public IQueryable<UserHistory> GetWrongHistory(int userid)
+        {
+            return CreateService<UserHistory>().Entities.Include(a => a.Test).Where(a => a.UsersId == userid && a.ExamId == null);    
+        }
     }
 }

@@ -9,9 +9,6 @@ namespace examinationPlatform.Models
         {
             Collection = new HashSet<Collection>();
             ExamRecord = new HashSet<ExamRecord>();
-            ExamStorage = new HashSet<ExamStorage>();
-            Information = new HashSet<Information>();
-            TestStorage = new HashSet<TestStorage>();
             UserHistory = new HashSet<UserHistory>();
         }
 
@@ -29,9 +26,6 @@ namespace examinationPlatform.Models
 
         public virtual ICollection<Collection> Collection { get; set; }
         public virtual ICollection<ExamRecord> ExamRecord { get; set; }
-        public virtual ICollection<ExamStorage> ExamStorage { get; set; }
-        public virtual ICollection<Information> Information { get; set; }
-        public virtual ICollection<TestStorage> TestStorage { get; set; }
         public virtual ICollection<UserHistory> UserHistory { get; set; }
     }
 }

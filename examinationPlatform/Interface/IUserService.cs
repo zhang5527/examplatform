@@ -20,5 +20,12 @@ namespace examinationPlatform.Interface
         void SaveExam(List<UserHistory> histories);
         void RefreshStorage(int ExamId, int UserId);
         IQueryable<UserHistory> GetExamHistory(int ExamId, int UserId);
+        void AddExamHistory(int userid, int examid, int wrongcount, int score);
+
+        IQueryable<ExamRecord> GetExamHistory();
+
+        ExamStorage GetExamByCode(string code);
+        IQueryable<Collection> GetCollectionById(int userid);
+        IQueryable<UserHistory> GetWrongHistory(int userid);
     }
 }

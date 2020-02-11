@@ -78,16 +78,18 @@
 
                             </div>
                         </div>
+                          i++;
                     }
+                  
                 }
                 @{
-                    i = 1;
+         
                     <h1 style="padding:15px 0px; font-weight: bold;">二:填空题</h1>
                     foreach (var item in Model.ExamContent.Select(a => a.Test).Where(a => a.Type == "blank"))
                     {
                         <div class="layui-card ">
                             <div class="layui-card-header">
-                                第 @(i++) 题
+                                第 @(i) 题
                                 <span class="choice-btn right">
                                     收藏
                                 </span>
@@ -104,14 +106,15 @@
                                 </div>
             </div>
             </div>
+                i++;
         }
         <h1 style="padding:15px 0px; font-weight: bold;">三:判断题</h1>
         foreach (var item in Model.ExamContent.Select(a => a.Test).Where(a => a.Type == "judege"))
         {
             <div class="layui-card ">
                 <div class="layui-card-header">
-                    第 @(i++) 题
-                    <span class="choice-btn right">
+                    第 @(i) 题
+                    <span class="choice-btn right" onclick="ToCollect(@item.Id)">
                         收藏
                     </span>
                 </div>
@@ -126,6 +129,7 @@
                 </div>
             </div>
         }
+                        i++;
                 }
 
 
@@ -140,7 +144,8 @@
                         //监听提交
                         form.on('submit(formDemo)', function (data) {
                             layer.confirm('确认要交卷吗？', function (index) {
-                                     layer.close(index);
+                                layer.close(index);
+                                localStorage.clear();
                                     //捉到所有被选中的，发异步进行删除
                                     $.ajax({
                                         type: "POST",                                   
@@ -155,6 +160,44 @@
                                 });
                         });
                     });
+                    $(document).ready(function () {
+                        hour =@Model.Time.Split('`')[0];
+                        minutes=@Model.Time.Split('`')[1];
+                        initata = localStorage.getItem("data");
+                        console.log(initata);
+                        if (initata != null) {
+                            test();
+                        }
+                        strm = minutes;
+                        if (seconds < 10) strs = "0" + seconds
+                        if (minutes < 10) strm = "0" + minutes
+                        if (hour < 10) strh = "0" + hour;
+                        $('#timer_s').html(strs);
+                        $('#timer_h').html(strh);
+                        $('#timer_m').html(strm);
+                        var int = self.setInterval("clock()", 1000);
+                        self.setInterval("getData()", 10000);
+                    })
+                            function ToCollect(id) {
+                                $.ajax({
+                                    url: '/user/CollectTest',
+                                    type: 'post',
+                                    dataType: 'text',
+                                    data: "id=" + id,
+                                    success: function (data) {
+                                        console.log(data);
+                                        if (data == '1') {
+                                            layer.msg('收藏成功');
+                                            table.reload(obj.config.id, {});
+                                        } else if(data=='0') {
+                                            layer.msg('收藏已存在');
+                                        }
+                                    },
+                                    'error': function () {
+                                        layer.msg('系统错误');
+                                    }
+                                })
+                            }
                 </script>
             </body>
 </html>

@@ -21,6 +21,8 @@ namespace examinationPlatform.Interface
         public bool JudgeUserExist(string account);
 
         public bool DeleteUser(int id);
+
+        IQueryable<Users> GetAdmins();
     }
     
 }

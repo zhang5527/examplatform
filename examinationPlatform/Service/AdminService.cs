@@ -17,7 +17,7 @@ namespace examinationPlatform.Service
 
         public IQueryable<object> GetAll()
         {
-            return CreateService<Users>().GetAll().Select(a => new
+            return CreateService<Users>().GetAll().Where(a=>a.UserGroup!=2).Select(a => new
             {
                 a.Nickname,
                 a.name,
@@ -26,8 +26,7 @@ namespace examinationPlatform.Service
                 a.Id,
                 a.College,
                 a.UserAccount
-            })
-                
+            })               
             ;
         }
 
@@ -79,5 +78,11 @@ namespace examinationPlatform.Service
         {
             return CreateService<Users>().FirstOrDefault(a => a.UserAccount == account);
         }
+
+        public IQueryable<Users> GetAdmins()
+        {
+            return CreateService<Users>().Where(a => a.UserGroup == 2);
+        }
+             
     }
 }

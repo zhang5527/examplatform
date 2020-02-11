@@ -204,7 +204,7 @@ layui.use(['layer','element','jquery'],function() {
 
 
     // 打开页面初始
-    xadmin.init();
+    //xadmin.init();
 
     //关闭tab清除记忆
     element.on('tabDelete(xbs_tab)', function(data){
